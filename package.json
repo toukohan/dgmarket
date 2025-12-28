@@ -1,0 +1,34 @@
+{
+  "name": "dgmarket",
+  "version": "0.0.1",
+  "description": "A marketplace for disc golf products and services",
+  "homepage": "https://github.com/toukohan/dgmarket#readme",
+  "bugs": {
+    "url": "https://github.com/toukohan/dgmarket/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toukohan/dgmarket.git"
+  },
+  "license": "ISC",
+  "author": "Touko Hänninen",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "tsx watch ./src/server/index.ts",
+    "db:start": "docker compose up -d",
+    "db:stop": "docker compose down",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/pg": "^8.16.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
+  }
+}
