@@ -69,32 +69,31 @@ export const verifyRefreshToken = (token: string) => {
     }
 }
 
-export const attachAccessTokenCookie = (res: Response, accessToken: string) => {
+export const attachAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
     res.cookie(ACCESS_TOKEN_KEY, accessToken, {
-       httpOnly: true,
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        path: "/api/auth/refresh",
+        path: "/",
         maxAge: ACCESS_TOKEN_EXP 
     })
-}
-
-export const attachRefreshTokenCookie = (res: Response, refreshToken: string) => {
     res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        path: "/api/auth/refresh",
+        path: "/",
         maxAge: REFRESH_TOKEN_EXP
     })
 }
+
+
 
 export const clearRefreshTokenCookie = (res: Response) => {
     res.clearCookie(REFRESH_TOKEN_KEY, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        path: "/auth/refresh",
+        path: "/",
     });
 }
 

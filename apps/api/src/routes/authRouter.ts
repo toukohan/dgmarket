@@ -2,7 +2,7 @@ import {Response, Request, Router, NextFunction} from "express"
 import { validate } from "../middleware/validate"
 import { registerSchema, loginSchema } from "@/schemas/authSchemas"
 import { login, register, logout, refresh } from "../services/authService"
-import { attachRefreshTokenCookie, attachAccessTokenCookie, verifyRefreshToken } from "../utils/jwt"
+import { verifyRefreshToken, attachAuthCookies } from "../utils/jwt"
 import { InvalidTokenError, MissingTokenError } from "@/api/errors"
 
 const router = Router()
@@ -19,8 +19,7 @@ router.post("/refresh", async (req: Request, res: Response, next: NextFunction) 
       if (!payload) return next(new InvalidTokenError("Refresh token invalid or expired"))
       const { user, accessToken, refreshToken: newToken } = await refresh(refreshToken, payload)
       
-      attachAccessTokenCookie(res, accessToken)
-      attachRefreshTokenCookie(res, newToken)
+      attachAuthCookies(res, accessToken, newToken)
       
       res.status(200).json({ user })
 
@@ -30,9 +29,7 @@ router.post("/login", validate(loginSchema), async (req: Request, res: Response)
     const { email, password } = req.body
     const { user, accessToken, refreshToken } = await login(email, password);
 
-    // Don't expose refresh token to js
-    attachAccessTokenCookie(res, accessToken);
-    attachRefreshTokenCookie(res, refreshToken);
+    attachAuthCookies(res, accessToken, refreshToken)
 
     res.status(200).json({ user })
 })
@@ -41,9 +38,7 @@ router.post("/register", validate(registerSchema), async (req: Request, res: Res
     const { name, email, password } = req.body
     const { user, accessToken, refreshToken } = await register(email, password, name);
 
-    // Don't expose refresh token to js
-    attachAccessTokenCookie(res, accessToken);
-    attachRefreshTokenCookie(res, refreshToken);
+    attachAuthCookies(res, accessToken, refreshToken)
 
     res.status(201).json({ user })
 })
