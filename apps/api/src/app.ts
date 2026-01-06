@@ -4,7 +4,6 @@ import helmet from 'helmet'
 import dotenv from "dotenv"
 import cookieParser from 'cookie-parser'
 import authRouter from "./routes/authRouter"
-import discRouter from "./routes/discRouter"
 import { errorHandler } from './middleware/errorHandler'
 
 dotenv.config()
@@ -25,7 +24,6 @@ export function createApp() {
         res.json({ok: true})
     })
     app.use("/api/auth", authRouter)
-    app.use("/api/discs", discRouter)
     app.use(errorHandler)
     return app
 }
