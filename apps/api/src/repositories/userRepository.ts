@@ -6,7 +6,7 @@ export async function findUserByEmail(email: string): Promise<UserRow | null> {
     `SELECT id, email, name, role, password_hash, created_at, updated_at
       FROM users
       WHERE email = $1`,
-    [email]
+    [email],
   );
   return rows[0] || null;
 }
@@ -16,10 +16,10 @@ export const findUserById = async (id: number): Promise<UserRow | null> => {
     `SELECT id, email, name, role, password_hash, created_at, updated_at
       FROM users
       WHERE id = $1`,
-    [id]
+    [id],
   );
   return rows[0] || null;
-}
+};
 
 export async function createUser({
   email,
@@ -36,8 +36,7 @@ export async function createUser({
     VALUES ($1, $2, $3)
     RETURNING id, email, name, role, password_hash, created_at, updated_at
     `,
-    [email, name, passwordHash]
+    [email, name, passwordHash],
   );
   return rows[0];
 }
-

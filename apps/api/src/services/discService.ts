@@ -6,8 +6,14 @@ import {
   deleteDisc,
   searchDiscs,
 } from "../repositories/discRepository";
-import { DiscRow, CreateDiscInput, UpdateDiscInput, DiscSearchFilters, PublicDisc } from "@/types/disc";
-import { UnauthorizedError, NotFoundError } from "@/api/errors";
+import {
+  DiscRow,
+  CreateDiscInput,
+  UpdateDiscInput,
+  DiscSearchFilters,
+  PublicDisc,
+} from "@/types/disc";
+import { UnauthorizedError, NotFoundError } from "../../../../packages/api-client/errors";
 
 function toPublicDisc(disc: DiscRow): PublicDisc {
   return disc;
@@ -15,7 +21,7 @@ function toPublicDisc(disc: DiscRow): PublicDisc {
 
 export async function createDiscForSeller(
   sellerId: number,
-  discData: CreateDiscInput
+  discData: CreateDiscInput,
 ): Promise<PublicDisc> {
   const disc = await createDisc(sellerId, discData);
   return toPublicDisc(disc);
@@ -41,7 +47,7 @@ export async function getDiscsBySeller(sellerId: number): Promise<PublicDisc[]> 
 export async function updateDiscForSeller(
   id: number,
   sellerId: number,
-  updates: UpdateDiscInput
+  updates: UpdateDiscInput,
 ): Promise<PublicDisc> {
   const disc = await updateDisc(id, sellerId, updates);
   if (!disc) {

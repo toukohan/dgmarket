@@ -1,7 +1,12 @@
 import { hashPassword, comparePasswords, hashToken } from "../utils/hashing";
 import { findUserByEmail, findUserById, createUser } from "../repositories/userRepository";
 import { findRefreshToken, revokeRefreshToken } from "../repositories/tokenRepository";
-import { EmailAlreadyExistsError, InvalidCredentialsError, InvalidTokenError, UnauthorizedError } from "@/api/errors";
+import {
+  EmailAlreadyExistsError,
+  InvalidCredentialsError,
+  InvalidTokenError,
+  UnauthorizedError,
+} from "../../../../packages/api-client/errors";
 import { generateAccessToken, generateAndInsertRefreshToken } from "../utils/jwt";
 import { PublicUser, UserRow } from "@/types/user";
 import { JwtPayload } from "jsonwebtoken";
@@ -19,11 +24,11 @@ function toPublicUser(user: UserRow): PublicUser {
 
 // create new access and refresh token and return them in an object with the user
 async function generateTokensAndBundleResult(user: UserRow): Promise<AuthResult> {
-  return { 
-    user: toPublicUser(user), 
-    accessToken: generateAccessToken({userId: user.id, role: user.role}), 
-    refreshToken: await generateAndInsertRefreshToken(user.id)
-  }
+  return {
+    user: toPublicUser(user),
+    accessToken: generateAccessToken({ userId: user.id, role: user.role }),
+    refreshToken: await generateAndInsertRefreshToken(user.id),
+  };
 }
 
 export async function register(email: string, password: string, name: string) {
@@ -33,7 +38,7 @@ export async function register(email: string, password: string, name: string) {
   // hash the password before saving user
   const passwordHash = await hashPassword(password);
   const user = await createUser({ email, name, passwordHash });
-  
+
   return generateTokensAndBundleResult(user);
 }
 
@@ -56,13 +61,12 @@ export async function refresh(refreshToken: string, payload: JwtPayload) {
 
   if (!user) throw new UnauthorizedError("No matching user");
   if (user.id != payload.userId) throw new InvalidTokenError("User does not match");
-  
+
   // revoke the previous token
-  await revokeRefreshToken(refreshToken)
+  await revokeRefreshToken(refreshToken);
   return generateTokensAndBundleResult(user);
 }
 
-export async function logout(refreshToken:string) {
-  await revokeRefreshToken(refreshToken)
-
+export async function logout(refreshToken: string) {
+  await revokeRefreshToken(refreshToken);
 }

@@ -1,9 +1,9 @@
-import path from 'path'
-import tailwindcss from '@tailwindcss/vite'
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-const root = path.resolve(__dirname, "..", "..")
-console.log("vite config:", root)
+import path from "path";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+const root = path.resolve(__dirname, "..", "..");
+console.log("vite config:", root);
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -18,7 +18,7 @@ export default defineConfig({
   },
   server: {
     fs: {
-      allow: ["../.."]
-    }
-  }
-})
+      allow: ["../.."],
+    },
+  },
+});

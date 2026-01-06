@@ -8,7 +8,7 @@ import { createRefreshToken } from "../../src/repositories/tokenRepository";
 import { resetDb } from "../reset/db";
 
 describe.sequential("POST /api/auth/refresh", () => {
-    beforeEach(async () => {
+  beforeEach(async () => {
     await resetDb();
   });
 
@@ -20,13 +20,11 @@ describe.sequential("POST /api/auth/refresh", () => {
   });
 
   it("returns 403 if refresh token cookie is does not verify", async () => {
-    const res = await api
-        .post("/api/auth/refresh")
-        .set("Cookie", "refreshToken=invalid");
-    
-    expect(res.status).toBe(403)
-    expect(res.body.error.message).toBe("Refresh token invalid or expired")
-  })
+    const res = await api.post("/api/auth/refresh").set("Cookie", "refreshToken=invalid");
+
+    expect(res.status).toBe(403);
+    expect(res.body.error.message).toBe("Refresh token invalid or expired");
+  });
 
   it("returns 401 if refresh token is expired", async () => {
     const user = await createTestUser();
@@ -36,25 +34,21 @@ describe.sequential("POST /api/auth/refresh", () => {
     await pool.query(
       `INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
        VALUES ($1, $2, $3)`,
-      [user.id, hashToken(refreshToken), new Date(Date.now() - 1000)]
+      [user.id, hashToken(refreshToken), new Date(Date.now() - 1000)],
     );
 
-    const res = await api
-      .post("/api/auth/refresh")
-      .set("Cookie", `refreshToken=${refreshToken}`);
+    const res = await api.post("/api/auth/refresh").set("Cookie", `refreshToken=${refreshToken}`);
 
     expect(res.status).toBe(401);
   });
   it("returns new access token if refresh token is valid", async () => {
     const user = await createTestUser();
     const refreshToken = generateRefreshToken(user.id);
-    await createRefreshToken(user.id, refreshToken, new Date(Date.now() + 60_000))
-    
-    const res = await api
-      .post("/api/auth/refresh")
-      .set("Cookie", `refreshToken=${refreshToken}`);
+    await createRefreshToken(user.id, refreshToken, new Date(Date.now() + 60_000));
+
+    const res = await api.post("/api/auth/refresh").set("Cookie", `refreshToken=${refreshToken}`);
     expect(res.status).toBe(200);
     expect(res.body.user).toBeDefined();
     expect(res.headers["set-cookie"]).toBeDefined();
   });
-})
+});

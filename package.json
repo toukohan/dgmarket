@@ -1,5 +1,11 @@
 {
+  "name": "dgmarket",
   "private": true,
+  "packageManager": "pnpm@10.27.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "pnpm -r --parallel dev",
     "dev:dashboard": "pnpm --filter dashboard dev",
@@ -7,6 +13,15 @@
     "dev:web": "pnpm --filter web dev",
     "db:start": "docker compose up -d",
     "db:stop": "docker compose down",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@dgmarket/eslint": "workspace:*",
+    "eslint": "9.37.0",
+    "typescript": "5.9.3" 
   }
 }

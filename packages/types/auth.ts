@@ -12,18 +12,18 @@ export interface AuthResponse {
 }
 
 export interface LoginFormData {
-    name: string;
-    email: string;
-    password: string;
+  name: string;
+  email: string;
+  password: string;
 }
 
 export interface RefreshToken {
-  id: number;               
-  userId: number;          
-  tokenHash: string;        
-  userAgent?: string | null;   
-  ipAddress?: string | null;   
-  createdAt: Date;         
-  expiresAt: Date;           
-  revokedAt?: Date | null;     
+  id: number;
+  userId: number;
+  tokenHash: string;
+  userAgent?: string | null;
+  ipAddress?: string | null;
+  createdAt: Date;
+  expiresAt: Date;
+  revokedAt?: Date | null;
 }

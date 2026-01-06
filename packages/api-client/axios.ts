@@ -1,25 +1,22 @@
 import axios, { AxiosError } from "axios";
 import type { AxiosInstance } from "axios";
-const URL = "http://localhost:4000/api"
+const URL = "http://localhost:4000/api";
 
 const api: AxiosInstance = axios.create({
   baseURL: URL,
   withCredentials: true, // send cookies
-  timeout: 10000
+  timeout: 10000,
 });
 
 let isRefreshing = false;
 let refreshPromise: Promise<void> | null = null;
 
 api.interceptors.response.use(
-  response => response,
+  (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as any;
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry
-    ) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       if (!isRefreshing) {
@@ -29,7 +26,7 @@ api.interceptors.response.use(
           .then(() => {
             isRefreshing = false;
           })
-          .catch(err => {
+          .catch((err) => {
             isRefreshing = false;
             refreshPromise = null;
             throw err;
@@ -41,7 +38,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
-export default api
+export default api;

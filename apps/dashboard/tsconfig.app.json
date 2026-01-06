@@ -27,10 +27,10 @@
     /* shadcn */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*", ],
+      "@/*": ["./src/*"],
       "@/types/*": ["../../packages/types/*"],
       "@/schemas/*": ["../../packages/schemas/*"],
-      "@/api/*": ["../../packages/api/*"]
+      "@/api/*": ["../../packages/api-client/*"]
     }
   },
   "include": ["src"]

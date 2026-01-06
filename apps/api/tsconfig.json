@@ -17,7 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "@/types/*": ["../../packages/types/*"],
-      "@/api/*": ["../../packages/api/*"],
+      "@/api/*": ["../../packages/api-client/*"],
       "@/schemas/*": ["../../packages/schemas/*"]
     }
   },

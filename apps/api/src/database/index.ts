@@ -1,18 +1,20 @@
 import { Pool } from "pg";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
-dotenv.config()
-const { POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_HOST } = process.env
-const url = `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}` || "MISSING"
+dotenv.config();
+const { POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_HOST } = process.env;
+const url =
+  `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}` ||
+  "MISSING";
 
 const pool = new Pool({
-    connectionString: url,
-    ssl: false
-})
+  connectionString: url,
+  ssl: false,
+});
 
-const enableCitext  = async (): Promise<void> => {
+const enableCitext = async (): Promise<void> => {
   await pool.query(`CREATE EXTENSION IF NOT EXISTS citext;`);
-}
+};
 
 const createUsersTable = async (): Promise<void> => {
   await pool.query(`
@@ -21,8 +23,7 @@ const createUsersTable = async (): Promise<void> => {
         IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
             CREATE TYPE user_role AS ENUM ('user', 'admin', 'moderator');
         END IF;
-    END$$;`
-  );
+    END$$;`);
 
   const query = `
     CREATE TABLE IF NOT EXISTS users (
@@ -38,24 +39,24 @@ const createUsersTable = async (): Promise<void> => {
   `;
 
   await pool.query(query);
-}
+};
 
 const createRefreshTokenTable = async () => {
-    const query = `
-            CREATE TABLE IF NOT EXISTS refresh_tokens (
-            id SERIAL PRIMARY KEY,
-            user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-            token_hash TEXT NOT NULL,
-            user_agent TEXT,
-            ip_address TEXT,
-            created_at TIMESTAMPTZ DEFAULT NOW(),
-            expires_at TIMESTAMPTZ NOT NULL,
-            revoked_at TIMESTAMPTZ,
-            CONSTRAINT token_hash_unique UNIQUE (token_hash)
-        );
-    `
-    await pool.query(query);
-}
+  const query = `
+      CREATE TABLE IF NOT EXISTS refresh_tokens (
+      id SERIAL PRIMARY KEY,
+      user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      token_hash TEXT NOT NULL,
+      user_agent TEXT,
+      ip_address TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      expires_at TIMESTAMPTZ NOT NULL,
+      revoked_at TIMESTAMPTZ,
+      CONSTRAINT token_hash_unique UNIQUE (token_hash)
+    );
+  `;
+  await pool.query(query);
+};
 
 const createUpdatedAtTrigger = async () => {
   await pool.query(`
@@ -75,16 +76,16 @@ const createUpdatedAtTrigger = async () => {
     FOR EACH ROW
     EXECUTE FUNCTION set_updated_at();
   `);
-}
+};
 
 export const initDb = async () => {
-    await pool.query("SELECT 1"); // test connection
+  await pool.query("SELECT 1"); // test connection
 
-    await enableCitext()
-    await createUsersTable()
-    await createRefreshTokenTable()
-    await createUpdatedAtTrigger()
-    console.log("Database initialized")
-}
+  await enableCitext();
+  await createUsersTable();
+  await createRefreshTokenTable();
+  await createUpdatedAtTrigger();
+  console.log("Database initialized");
+};
 
-export default pool
+export default pool;

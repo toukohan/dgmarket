@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useAuth } from "../store/authContext";
 import { Card, CardContent } from "./ui/card";
@@ -6,7 +5,6 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { loginSchema, registerSchema } from "../../../../packages/schemas/authSchemas";
-
 
 type Mode = "login" | "register";
 
@@ -20,23 +18,19 @@ export default function AuthForms() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
-  })
+    confirmPassword: "",
+  });
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const { login, register } = useAuth();
 
   const handleInputChange = (identifier: string, value: string) => {
-    setFormInput(prev => ({
+    setFormInput((prev) => ({
       ...prev,
-      [identifier]: value
-    }))
-  }
+      [identifier]: value,
+    }));
+  };
 
-  const validateInput = <M extends Mode>(
-    mode: M,
-    identifier: SchemaKeys<M>,
-    value: unknown
-  ) => {
+  const validateInput = <M extends Mode>(mode: M, identifier: SchemaKeys<M>, value: unknown) => {
     // Pick the right schema dynamically
     const schema =
       mode === "login"
@@ -50,27 +44,27 @@ export default function AuthForms() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (mode === "register") {
       if (formInput.password !== formInput.confirmPassword) {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          confirmPassword: "passwords don't match"
-        }))
-        return
+          confirmPassword: "passwords don't match",
+        }));
+        return;
       }
       if (formInput.name == "") {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          name: "Name is required"
-        }))
-        return
+          name: "Name is required",
+        }));
+        return;
       }
-      await register(formInput.name, formInput.email, formInput.password)
+      await register(formInput.name, formInput.email, formInput.password);
     } else {
-      await login(formInput.email, formInput.password)
+      await login(formInput.email, formInput.password);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -84,58 +78,73 @@ export default function AuthForms() {
             {mode === "register" && (
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
-                <Input id="name" 
+                <Input
+                  id="name"
                   value={formInput.name}
-                  
-                  onChange={(e) => handleInputChange("name", e.target.value)} 
-                  placeholder="John Doe" />
-                  {errors.name && 
-                    <p className="mt-1 text-sm text-red-600 leading-tight">{errors.name}</p>}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  placeholder="John Doe"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600 leading-tight">{errors.name}</p>
+                )}
               </div>
             )}
 
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" 
-                type="email" 
-                value={formInput.email} 
-                onBlur={(e) => setErrors(prev => ({
-                  ...prev,
-                  email: validateInput(mode, "email", e.target.value)
-
-                }))}
-                onChange={(e) => handleInputChange("email", e.target.value)} 
-                placeholder="you@example.com" />
-                {errors.email && 
-                <p className="mt-1 text-sm text-red-600 leading-tight">{errors.email}</p>}
+              <Input
+                id="email"
+                type="email"
+                value={formInput.email}
+                onBlur={(e) =>
+                  setErrors((prev) => ({
+                    ...prev,
+                    email: validateInput(mode, "email", e.target.value),
+                  }))
+                }
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                placeholder="you@example.com"
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600 leading-tight">{errors.email}</p>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" 
-                type="password" 
-                value={formInput.password} 
-                onBlur={(e) => setErrors(prev => ({
-                  ...prev,
-                  password: validateInput(mode, "password", e.target.value)
-
-                }))}
-                onChange={(e) => handleInputChange("password", e.target.value)} 
-                placeholder="••••••••" />
-                {errors.password && 
-                  <p className="mt-1 text-sm text-red-600 leading-tight">{errors.password}</p>}
+              <Input
+                id="password"
+                type="password"
+                value={formInput.password}
+                onBlur={(e) =>
+                  setErrors((prev) => ({
+                    ...prev,
+                    password: validateInput(mode, "password", e.target.value),
+                  }))
+                }
+                onChange={(e) => handleInputChange("password", e.target.value)}
+                placeholder="••••••••"
+              />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600 leading-tight">{errors.password}</p>
+              )}
             </div>
 
             {mode === "register" && (
               <div className="space-y-2">
                 <Label htmlFor="confirm">Confirm Password</Label>
-                <Input id="confirm" 
-                  type="password" 
+                <Input
+                  id="confirm"
+                  type="password"
                   value={formInput.confirmPassword}
-                  onChange={(e) => handleInputChange("confirmPassword", e.target.value)} 
-                  placeholder="••••••••" />
-                  {errors.confirmPassword && 
-                    <p className="mt-1 text-sm text-red-600 leading-tight">{errors.confirmPassword}</p>}
+                  onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                  placeholder="••••••••"
+                />
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600 leading-tight">
+                    {errors.confirmPassword}
+                  </p>
+                )}
               </div>
             )}
 
@@ -158,5 +167,4 @@ export default function AuthForms() {
       </Card>
     </div>
   );
-    
 }

@@ -13,7 +13,7 @@ export const validate =
         return res.status(400).json({
           error: {
             code: "VALIDATION_ERROR",
-            message: err.issues.map(e => e.message).join(", "),
+            message: err.issues.map((e) => e.message).join(", "),
           },
         });
       }
