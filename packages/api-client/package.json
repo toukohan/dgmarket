@@ -1,15 +1,15 @@
 {
-  "name": "@dgmarket/api-client",
-  "version": "0.0.0",
-  "private": true,
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "dependencies": {
-    "@dgmarket/schemas": "workspace:*",
-    "@dgmarket/types": "workspace:*",
-    "axios": "^1.13.2"
-  },
-  "devDependencies": {
-    "typescript": "^5.9.3"
-  }
+    "name": "@dgmarket/api-client",
+    "version": "0.0.0",
+    "private": true,
+    "main": "src/index.ts",
+    "types": "src/index.ts",
+    "dependencies": {
+        "@dgmarket/schemas": "workspace:*",
+        "@dgmarket/types": "workspace:*",
+        "axios": "^1.13.2"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.3"
+    }
 }

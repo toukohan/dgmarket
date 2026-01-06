@@ -1,23 +1,29 @@
-import { Pool } from "pg";
 import dotenv from "dotenv";
+import { Pool } from "pg";
 
 dotenv.config();
-const { POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_HOST } = process.env;
+const {
+    POSTGRES_DB,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    POSTGRES_PORT,
+    POSTGRES_HOST,
+} = process.env;
 const url =
-  `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}` ||
-  "MISSING";
+    `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}` ||
+    "MISSING";
 
 const pool = new Pool({
-  connectionString: url,
-  ssl: false,
+    connectionString: url,
+    ssl: false,
 });
 
 const enableCitext = async (): Promise<void> => {
-  await pool.query(`CREATE EXTENSION IF NOT EXISTS citext;`);
+    await pool.query(`CREATE EXTENSION IF NOT EXISTS citext;`);
 };
 
 const createUsersTable = async (): Promise<void> => {
-  await pool.query(`
+    await pool.query(`
     DO $$
     BEGIN
         IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
@@ -25,7 +31,7 @@ const createUsersTable = async (): Promise<void> => {
         END IF;
     END$$;`);
 
-  const query = `
+    const query = `
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
       email CITEXT NOT NULL,
@@ -38,11 +44,11 @@ const createUsersTable = async (): Promise<void> => {
     );
   `;
 
-  await pool.query(query);
+    await pool.query(query);
 };
 
 const createRefreshTokenTable = async () => {
-  const query = `
+    const query = `
       CREATE TABLE IF NOT EXISTS refresh_tokens (
       id SERIAL PRIMARY KEY,
       user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -55,11 +61,11 @@ const createRefreshTokenTable = async () => {
       CONSTRAINT token_hash_unique UNIQUE (token_hash)
     );
   `;
-  await pool.query(query);
+    await pool.query(query);
 };
 
 const createUpdatedAtTrigger = async () => {
-  await pool.query(`
+    await pool.query(`
     CREATE OR REPLACE FUNCTION set_updated_at()
     RETURNS TRIGGER AS $$
     BEGIN
@@ -69,7 +75,7 @@ const createUpdatedAtTrigger = async () => {
     $$ LANGUAGE plpgsql;
   `);
 
-  await pool.query(`
+    await pool.query(`
     DROP TRIGGER IF EXISTS set_users_updated_at ON users;
     CREATE TRIGGER set_users_updated_at
     BEFORE UPDATE ON users
@@ -79,13 +85,13 @@ const createUpdatedAtTrigger = async () => {
 };
 
 export const initDb = async () => {
-  await pool.query("SELECT 1"); // test connection
+    await pool.query("SELECT 1"); // test connection
 
-  await enableCitext();
-  await createUsersTable();
-  await createRefreshTokenTable();
-  await createUpdatedAtTrigger();
-  console.log("Database initialized");
+    await enableCitext();
+    await createUsersTable();
+    await createRefreshTokenTable();
+    await createUpdatedAtTrigger();
+    console.log("Database initialized");
 };
 
 export default pool;

@@ -1,4 +1,4 @@
-import * as js from "@eslint/js"
+import * as js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 
