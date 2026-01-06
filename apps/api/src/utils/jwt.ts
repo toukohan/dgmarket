@@ -10,8 +10,8 @@ export interface AccessTokenPayload {
   role: UserRole;
 }
 
-const ACCESS_TOKEN_EXP = 15 * 60;           // 15 minutes
-const REFRESH_TOKEN_EXP = 7 * 24 * 60 * 60; // 7 days
+const ACCESS_TOKEN_EXP = 15 * 60;           // 15 minutes in seconds
+const REFRESH_TOKEN_EXP = 7 * 24 * 60 * 60; // 7 days in seconds
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
@@ -70,22 +70,20 @@ export const verifyRefreshToken = (token: string) => {
 }
 
 export const attachAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
-    res.cookie(ACCESS_TOKEN_KEY, accessToken, {
+    return res.cookie(ACCESS_TOKEN_KEY, accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         path: "/",
-        maxAge: ACCESS_TOKEN_EXP 
-    })
-    res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
+        maxAge: ACCESS_TOKEN_EXP * 1000 // Convert seconds to milliseconds
+    }).cookie(REFRESH_TOKEN_KEY, refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         path: "/",
-        maxAge: REFRESH_TOKEN_EXP
+        maxAge: REFRESH_TOKEN_EXP * 1000 // Convert seconds to milliseconds
     })
 }
-
 
 
 export const clearRefreshTokenCookie = (res: Response) => {

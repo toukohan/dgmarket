@@ -19,7 +19,7 @@ router.post("/refresh", async (req: Request, res: Response, next: NextFunction) 
       if (!payload) return next(new InvalidTokenError("Refresh token invalid or expired"))
       const { user, accessToken, refreshToken: newToken } = await refresh(refreshToken, payload)
       
-      attachAuthCookies(res, accessToken, newToken)
+      res = attachAuthCookies(res, accessToken, newToken)
       
       res.status(200).json({ user })
 
@@ -29,7 +29,7 @@ router.post("/login", validate(loginSchema), async (req: Request, res: Response)
     const { email, password } = req.body
     const { user, accessToken, refreshToken } = await login(email, password);
 
-    attachAuthCookies(res, accessToken, refreshToken)
+    res = attachAuthCookies(res, accessToken, refreshToken)
 
     res.status(200).json({ user })
 })
@@ -38,7 +38,7 @@ router.post("/register", validate(registerSchema), async (req: Request, res: Res
     const { name, email, password } = req.body
     const { user, accessToken, refreshToken } = await register(email, password, name);
 
-    attachAuthCookies(res, accessToken, refreshToken)
+    res = attachAuthCookies(res, accessToken, refreshToken)
 
     res.status(201).json({ user })
 })

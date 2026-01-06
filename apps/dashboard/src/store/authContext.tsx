@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
 
 const useProvideAuth = (): AuthContextType => {
     const [user, setUser] = useState<AuthUser | null>(null)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     
     const login = async (email: string, password: string) => {
         setLoading(true)
