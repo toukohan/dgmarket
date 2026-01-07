@@ -4,7 +4,7 @@ import {
     createRefreshToken,
     findRefreshToken,
     revokeRefreshToken,
-} from "../../src/repositories/tokenRepository";
+} from "../../src/repositories/token.repository";
 import { hashToken } from "../../src/utils/hashing";
 import { generateRefreshToken } from "../../src/utils/jwt";
 import { createTestUser } from "../factories/user.factory";

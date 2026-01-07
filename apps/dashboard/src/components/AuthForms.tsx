@@ -8,7 +8,7 @@ import { Label } from "./ui/label";
 import {
     loginSchema,
     registerSchema,
-} from "../../../../packages/schemas/authSchemas";
+} from "@dgmarket/schemas";
 
 type Mode = "login" | "register";
 

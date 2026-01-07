@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 
-import { findRefreshToken } from "../../src/repositories/tokenRepository";
-import { register } from "../../src/services/authService";
+import { findRefreshToken } from "../../src/repositories/token.repository";
+import { register } from "../../src/services/auth.service";
 import { resetDb } from "../reset/db";
 import { api } from "../setup/testApp";
 

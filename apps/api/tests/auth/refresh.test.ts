@@ -1,7 +1,7 @@
 import { beforeEach, describe, it, expect } from "vitest";
 
 import pool from "../../src/database";
-import { createRefreshToken } from "../../src/repositories/tokenRepository";
+import { createRefreshToken } from "../../src/repositories/token.repository";
 import { hashToken } from "../../src/utils/hashing";
 import {
     generateRefreshToken,

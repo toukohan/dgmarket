@@ -1,8 +1,8 @@
 import React, { createContext, useState, use } from "react";
 
-import api from "../../../../packages/api-client/axios";
+import  { api } from "@dgmarket/api-client";
 
-import type { AuthUser } from "../../../../packages/types/auth";
+import type { AuthUser } from "@dgmarket/types";
 
 interface AuthContextType {
     user: AuthUser | null;

@@ -16,8 +16,8 @@ import {
     findUserByEmail,
     findUserById,
     createUser,
-} from "../repositories/userRepository";
-import { hashPassword, comparePasswords, hashToken } from "../utils/hashing";
+} from "../repositories/user.repository";
+import { hashPassword, comparePasswords } from "../utils/hashing";
 import {
     generateAccessToken,
     generateAndInsertRefreshToken,
@@ -30,6 +30,7 @@ interface AuthResult {
 }
 
 function toPublicUser(user: UserRow): PublicUser {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password_hash, ...publicData } = user;
     return publicData;
 }

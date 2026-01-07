@@ -1,10 +1,8 @@
 import { registerSchema, loginSchema } from "@dgmarket/schemas";
 import { Response, Request, Router, NextFunction } from "express";
 
-import {
-    InvalidTokenError,
-    MissingTokenError,
-} from "../../../../packages/api-client/src/errors";
+import { InvalidTokenError, MissingTokenError } from "@/errors";
+
 import { validate } from "../middleware/validate";
 import { login, register, logout, refresh } from "../services/auth.service";
 import { verifyRefreshToken, attachAuthCookies } from "../utils/jwt";

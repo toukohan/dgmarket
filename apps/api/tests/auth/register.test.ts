@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 
-import { findUserByEmail } from "../../src/repositories/userRepository";
+import { findUserByEmail } from "../../src/repositories/user.repository";
 import { comparePasswords } from "../../src/utils/hashing";
 import { resetDb } from "../reset/db";
 import { api } from "../setup/testApp";

@@ -22,6 +22,6 @@
             "@/schemas/*": ["../../packages/schemas/*"]
         }
     },
-    "include": ["src/**/*", "../../packages/schemas"],
+    "include": ["src/**/*", "vite.config.ts"],
     "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts", "tests"]
 }

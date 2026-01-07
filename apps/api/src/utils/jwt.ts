@@ -81,7 +81,7 @@ export const attachAuthCookies = (
     res: Response,
     accessToken: string,
     refreshToken: string,
-) => {
+): Response => {
     return res
         .cookie(ACCESS_TOKEN_KEY, accessToken, {
             httpOnly: true,
