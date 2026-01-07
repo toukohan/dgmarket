@@ -23,6 +23,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@dgmarket/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
       '@dgmarket/eslint':
         specifier: workspace:*
         version: link:../../packages/eslint-config

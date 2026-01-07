@@ -6,7 +6,7 @@ import {
     MissingTokenError,
 } from "../../../../packages/api-client/src/errors";
 import { validate } from "../middleware/validate";
-import { login, register, logout, refresh } from "../services/authService";
+import { login, register, logout, refresh } from "../services/auth.service";
 import { verifyRefreshToken, attachAuthCookies } from "../utils/jwt";
 
 const router = Router();

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 
-import { register } from "../../src/services/authService";
+import { register } from "../../src/services/auth.service";
 import { resetDb } from "../reset/db";
 import { api } from "../setup/testApp";
 

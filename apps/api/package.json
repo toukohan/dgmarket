@@ -15,6 +15,7 @@
         "@dgmarket/types": "workspace:*",
         "@dgmarket/schemas": "workspace:*",
         "@dgmarket/eslint": "workspace:*",
+        "@dgmarket/api-client": "workspace:*",
         "bcrypt": "^6.0.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",

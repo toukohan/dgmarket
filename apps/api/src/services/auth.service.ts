@@ -11,7 +11,7 @@ import {
 import {
     findRefreshToken,
     revokeRefreshToken,
-} from "../repositories/tokenRepository";
+} from "../repositories/token.repository";
 import {
     findUserByEmail,
     findUserById,

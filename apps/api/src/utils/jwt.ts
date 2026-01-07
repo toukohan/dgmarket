@@ -5,7 +5,7 @@ import path from "path";
 
 import { UserRole } from "@/types/src/user";
 
-import { createRefreshToken } from "../repositories/tokenRepository";
+import { createRefreshToken } from "../repositories/token.repository";
 
 export interface AccessTokenPayload {
     userId: number;
