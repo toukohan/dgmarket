@@ -58,7 +58,6 @@ root/
 │  └─ api-client/     # Shared API client
 │
 ├─ docs/
-│  ├─ project-baseline.md
 │  └─ decisions.md
 │
 └─ package.json       # pnpm workspace config & scripts
