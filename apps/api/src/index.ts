@@ -1,12 +1,12 @@
 import { createApp } from "./app";
-import { initDb } from "./database";
+import { runMigrations } from "./database";
 
-const app = createApp();
+const app = createApp("test");
 const port = process.env.PORT || 3000;
 
 const start = async () => {
     try {
-        await initDb();
+        await runMigrations();
         app.listen(port, () => {
             console.log("Server started at port", port);
         });

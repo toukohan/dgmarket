@@ -1,12 +1,11 @@
 import { beforeAll, afterAll } from "vitest";
 
-import pool from "../../src/database";
-import { resetDb } from "../reset/db";
+import pool, { runMigrations } from "../../src/database";
+
 
 beforeAll(async () => {
-    await pool.query("SELECT 1");
-    await resetDb();
-    console.log("testDb before all, select 1, resetDB");
+    await runMigrations();
+    console.log("testDb before all, run migrations");
 });
 
 afterAll(async () => {

@@ -8,9 +8,14 @@ import { errorHandler } from "./middleware/errorHandler";
 import authRouter from "./routes/authRouter";
 import productRouter from "./routes/producRouter";
 
-dotenv.config();
 
-export function createApp() {
+dotenv.config({
+    path: "./.env.test"
+})
+export function createApp(env: string = "dev") {
+
+    console.log("db:", process.env.POSTGRES_DB)
+
     const app = express();
     app.use(
         helmet({
