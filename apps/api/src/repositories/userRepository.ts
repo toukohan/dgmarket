@@ -1,4 +1,4 @@
-import { UserRow } from "@/types/user";
+import { UserRow } from "@/types/src/user";
 
 import pool from "../database";
 

@@ -3,7 +3,7 @@ import fs from "fs";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import path from "path";
 
-import { UserRole } from "@/types/user";
+import { UserRole } from "@/types/src/user";
 
 import { createRefreshToken } from "../repositories/tokenRepository";
 
@@ -62,7 +62,7 @@ export const verifyAccessToken = (token: string) => {
         return jwt.verify(token, publicAccessKey, {
             algorithms: ["RS256"],
         }) as JwtPayload;
-    } catch (_) {
+    } catch (err) {
         return undefined;
     }
 };

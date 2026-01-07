@@ -12,6 +12,9 @@
     "license": "ISC",
     "packageManager": "pnpm@10.27.0",
     "dependencies": {
+        "@dgmarket/types": "workspace:*",
+        "@dgmarket/schemas": "workspace:*",
+        "@dgmarket/eslint": "workspace:*",
         "bcrypt": "^6.0.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",

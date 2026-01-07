@@ -9,15 +9,15 @@
         "lint": "eslint"
     },
     "dependencies": {
+        "@dgmarket/eslint": "workspace: *",
+        "@dgmarket/types": "workspace: *",
+        "@dgmarket/schemas": "workspace: *",
+        "@dgmarket/api-client": "workspace: *",
         "next": "16.1.1",
         "react": "19.2.3",
         "react-dom": "19.2.3"
     },
     "devDependencies": {
-        "@dgmarket/eslint": "workspace: *",
-        "@dgmarket/types": "workspace: *",
-        "@dgmarket/schemas": "workspace: *",
-        "@dgmarket/api-client": "workspace: *",
         "@tailwindcss/postcss": "^4",
         "@types/node": "^20",
         "@types/react": "^19",

@@ -23,6 +23,15 @@ importers:
 
   apps/api:
     dependencies:
+      '@dgmarket/eslint':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@dgmarket/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
+      '@dgmarket/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -99,6 +108,18 @@ importers:
 
   apps/dashboard:
     dependencies:
+      '@dgmarket/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
+      '@dgmarket/eslint':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@dgmarket/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
+      '@dgmarket/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@radix-ui/react-label':
         specifier: ^2.1.8
         version: 2.1.8(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -130,18 +151,6 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
     devDependencies:
-      '@dgmarket/api-client':
-        specifier: workspace:*
-        version: link:../../packages/api-client
-      '@dgmarket/eslint':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@dgmarket/schemas':
-        specifier: workspace:*
-        version: link:../../packages/schemas
-      '@dgmarket/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.2
@@ -184,16 +193,6 @@ importers:
 
   apps/web:
     dependencies:
-      next:
-        specifier: 16.1.1
-        version: 16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      react:
-        specifier: 19.2.3
-        version: 19.2.3
-      react-dom:
-        specifier: 19.2.3
-        version: 19.2.3(react@19.2.3)
-    devDependencies:
       '@dgmarket/api-client':
         specifier: 'workspace: *'
         version: link:../../packages/api-client
@@ -206,6 +205,16 @@ importers:
       '@dgmarket/types':
         specifier: 'workspace: *'
         version: link:../../packages/types
+      next:
+        specifier: 16.1.1
+        version: 16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      react:
+        specifier: 19.2.3
+        version: 19.2.3
+      react-dom:
+        specifier: 19.2.3
+        version: 19.2.3(react@19.2.3)
+    devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.18

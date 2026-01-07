@@ -1,6 +1,5 @@
+import { registerSchema, loginSchema } from "@dgmarket/schemas";
 import { Response, Request, Router, NextFunction } from "express";
-
-import { registerSchema, loginSchema } from "@/schemas/authSchemas";
 
 import {
     InvalidTokenError,

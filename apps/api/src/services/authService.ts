@@ -1,6 +1,6 @@
 import { JwtPayload } from "jsonwebtoken";
 
-import { PublicUser, UserRow } from "@/types/user";
+import { PublicUser, UserRow } from "@/types/src/user";
 
 import {
     EmailAlreadyExistsError,

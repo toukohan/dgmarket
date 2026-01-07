@@ -17,7 +17,7 @@
         "lint:fix": "eslint . --fix",
         "format": "prettier . --write",
         "format:check": "prettier . --check",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "pnpm -r test"
     },
     "devDependencies": {
         "@dgmarket/eslint": "workspace:*",
