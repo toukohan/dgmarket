@@ -1,22 +1,23 @@
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 
 import { resetDb } from "../reset/db";
 import { api } from "../setup/testApp";
 
 describe.sequential("POST /api/auth/login", () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         await resetDb();
-        const res = await api.post("/api/auth/register").send({
-            name: "Alice Bob",
-            email: "alice.bob@mail.com",
-            password: "smashing",
-        });
+         
     });
 
     it("valid request returns user and tokens", async () => {
+        await api.post("/api/auth/register").send({
+            name: "Alice Registered",
+            email: "alice.registered@mail.com",
+            password: "alicespassword",
+        });
         const res = await api.post("/api/auth/login").send({
-            email: "alice.bob@mail.com",
-            password: "smashing",
+            email: "alice.registered@mail.com",
+            password: "alicespassword",
         });
         const cookies = res.headers["set-cookie"];
         expect(cookies).toBeDefined();
@@ -28,15 +29,16 @@ describe.sequential("POST /api/auth/login", () => {
 
     it("returns 401 if email is not found", async () => {
         const res = await api.post("/api/auth/login").send({
-            email: "john@mail.com",
+            email: "bob.missing@mail.com",
             password: "supersecret",
         });
         expect(res.status).toBe(401);
     });
 
     it("returns 401 if password is not a match", async () => {
+     
         const res = await api.post("/api/auth/login").send({
-            email: "alice.bob@mail.com",
+            email: "alice.registered@mail.com",
             password: "wrongpassword",
         });
         expect(res.status).toBe(401);
@@ -45,7 +47,7 @@ describe.sequential("POST /api/auth/login", () => {
     it("returns 400 if email is not a valid email", async () => {
         const res = await api.post("/api/auth/login").send({
             email: "alice",
-            password: "smashing",
+            password: "alicespassword",
         });
         expect(res.status).toBe(400);
     });

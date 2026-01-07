@@ -6,6 +6,7 @@ import helmet from "helmet";
 
 import { errorHandler } from "./middleware/errorHandler";
 import authRouter from "./routes/authRouter";
+import productRouter from "./routes/producRouter";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ export function createApp() {
         res.json({ ok: true });
     });
     app.use("/api/auth", authRouter);
+    app.use("/api/products", productRouter);
     app.use(errorHandler);
     return app;
 }

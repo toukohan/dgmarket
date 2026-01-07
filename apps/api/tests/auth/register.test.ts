@@ -11,18 +11,24 @@ describe.sequential("POST /api/auth/register", () => {
     });
     it("valid request stores the user properly", async () => {
         const res = await api.post("/api/auth/register").send({
-            name: "Alice Bob",
-            email: "alice.bob@mail.com",
+            name: "Bob Alice",
+            email: "bob.alice@mail.com",
             password: "smashing",
         });
-        const user = await findUserByEmail("alice.bob@mail.com");
+        const user = await findUserByEmail("bob.alice@mail.com");
+
+        expect(user).not.toBeNull()
+        if (!user) {
+            throw new Error("User is null")
+        }
+        expect(user.password_hash).toBeDefined()
         const passwordMatch = await comparePasswords(
             "smashing",
             user.password_hash,
         );
         expect(res.status).toBe(201);
         expect(res.body.user).toBeDefined();
-        expect(user.name).toBe("Alice Bob");
+        expect(user.name).toBe("Bob Alice");
         expect(passwordMatch).toBe(true);
     });
 

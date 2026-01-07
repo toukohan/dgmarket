@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 
+import { loginSchema, registerSchema } from "@dgmarket/schemas";
+
 import { useAuth } from "../store/authContext";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import {
-    loginSchema,
-    registerSchema,
-} from "@dgmarket/schemas";
 
 type Mode = "login" | "register";
 

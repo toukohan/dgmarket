@@ -29,7 +29,7 @@ describe("POST /api/products", () => {
 
         const res = await api
             .post("/api/products")
-            .set("Authorization", `Bearer ${accessToken}`)
+            .set("Cookie", `accessToken=${accessToken}`)
             .send({
                 name: "Destroyer",
                 // missing priceCents + condition
@@ -41,14 +41,14 @@ describe("POST /api/products", () => {
 
     it("creates a product for an authenticated seller", async () => {
         const { accessToken } = await register(
-            "seller@mail.com",
+            "seller1@mail.com",
             "strongpassword",
             "Seller",
         );
 
         const res = await api
             .post("/api/products")
-            .set("Authorization", `Bearer ${accessToken}`)
+            .set("Cookie", `accessToken=${accessToken}`)
             .send({
                 name: "Destroyer",
                 description: "Fast distance driver",
