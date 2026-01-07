@@ -1,13 +1,13 @@
 import { JwtPayload } from "jsonwebtoken";
 
-import { PublicUser, UserRow } from "@/types/src/user";
-
 import {
     EmailAlreadyExistsError,
     InvalidCredentialsError,
     InvalidTokenError,
     UnauthorizedError,
-} from "../../../../packages/api-client/src/errors";
+} from "@/errors";
+import { PublicUser, UserRow } from "@/types/src/user";
+
 import {
     findRefreshToken,
     revokeRefreshToken,
