@@ -53,6 +53,8 @@ root/
 │
 ├─ packages/
 │  ├─ schemas/        # Shared Zod schemas
+│  ├─ types/          # Shared types
+│  ├─ eslint-config/  # Eslint config
 │  └─ api-client/     # Shared API client
 │
 ├─ docs/
@@ -109,7 +111,11 @@ root/
 
 ### `packages/types`
 
-- Shared types
+- Shared types between apps
+
+### `packages/eslint-config`
+
+- Customizable eslint-config for different apps
 
 ---
 
@@ -144,7 +150,7 @@ Frontend behavior:
 
 ## Documentation
 
-- **`docs/project-baseline.md`** – Single source of truth for architecture and conventions
+- **`README.md`** – Single source of truth for architecture and conventions
 - **`docs/decisions.md`** – Record of important architectural decisions and trade-offs
 
 When working with ChatGPT, reference the baseline explicitly:
@@ -162,4 +168,4 @@ When working with ChatGPT, reference the baseline explicitly:
 
 ---
 
-_Last updated: 06.01.2026_
+_Last updated: 07.01.2026_
