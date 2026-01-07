@@ -17,7 +17,6 @@ bun.lockb
 dist/
 build/
 out/
-docs/
 .next/
 .nuxt/
 *.tsbuildinfo

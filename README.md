@@ -112,6 +112,7 @@ root/
 ### `packages/types`
 
 - Shared types between apps
+- Remove these after everything uses zod schemas
 
 ### `packages/eslint-config`
 
