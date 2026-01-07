@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { ApiError } from "../../../../packages/api-client/errors";
+import { ApiError } from "../../../../packages/api-client/src/errors";
 
 export const errorHandler = (
     err: Error,

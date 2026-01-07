@@ -4,7 +4,7 @@ import { Response, Request, Router, NextFunction } from "express";
 import {
     InvalidTokenError,
     MissingTokenError,
-} from "../../../../packages/api-client/errors";
+} from "../../../../packages/api-client/src/errors";
 import { validate } from "../middleware/validate";
 import { login, register, logout, refresh } from "../services/authService";
 import { verifyRefreshToken, attachAuthCookies } from "../utils/jwt";

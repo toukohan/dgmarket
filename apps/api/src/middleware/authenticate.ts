@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-import { UnauthorizedError } from "../../../../packages/api-client/errors";
+import { UnauthorizedError } from "../../../../packages/api-client/src/errors";
 import { verifyAccessToken } from "../utils/jwt";
 
 export interface AuthenticatedRequest extends Request {

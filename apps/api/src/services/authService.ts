@@ -7,7 +7,7 @@ import {
     InvalidCredentialsError,
     InvalidTokenError,
     UnauthorizedError,
-} from "../../../../packages/api-client/errors";
+} from "../../../../packages/api-client/src/errors";
 import {
     findRefreshToken,
     revokeRefreshToken,

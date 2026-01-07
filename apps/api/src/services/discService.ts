@@ -9,7 +9,7 @@ import {
 import {
     UnauthorizedError,
     NotFoundError,
-} from "../../../../packages/api-client/errors";
+} from "../../../../packages/api-client/src/errors";
 import {
     createDisc,
     findDiscById,

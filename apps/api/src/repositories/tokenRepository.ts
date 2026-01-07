@@ -1,6 +1,6 @@
 import { RefreshToken } from "@/types/auth";
 
-import { DatabaseError } from "../../../../packages/api-client/errors";
+import { DatabaseError } from "../../../../packages/api-client/src/errors";
 import pool from "../database";
 import { hashToken } from "../utils/hashing";
 
