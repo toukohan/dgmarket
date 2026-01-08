@@ -1,5 +1,5 @@
 // apps/api/src/repositories/product.repository.ts
-import { ProductCreate } from "@dgmarket/schemas/src";
+import { ProductCreate } from "@dgmarket/schemas";
 
 type ProductRow = {
     id: number;

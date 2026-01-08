@@ -22,7 +22,7 @@
             "@/schemas/*": ["../../packages/schemas/*"]
         },
 
-        "typeRoots": ["node_modules/@types", "src/types"]
+        "typeRoots": ["src/types", "node_modules/@types"]
     },
     "include": ["src/**/*", "tests/**/*", "vite.config.ts", "src/types/*"],
     "exclude": ["node_modules", "dist"]

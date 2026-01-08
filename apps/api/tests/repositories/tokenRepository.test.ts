@@ -1,5 +1,6 @@
-import { PoolClient } from "pg";
 import { describe, it, expect, beforeEach } from "vitest";
+
+import pool from "@/database";
 
 import {
     createRefreshToken,
@@ -9,25 +10,24 @@ import {
 import { hashToken } from "../../src/utils/hashing";
 import { generateRefreshToken } from "../../src/utils/jwt";
 import { createTestUser } from "../factories/user.factory";
-import { getDbClient } from "../setup/testDb";
+import { resetDb } from "../helpers";
 
-let db: PoolClient;
 describe.sequential("token repository", () => {
-    beforeEach(() => {
-        db = getDbClient();
+    beforeEach(async () => {
+        await resetDb();
     });
     it.sequential("stores refresh token with users id", async () => {
-        const user = await createTestUser(db);
+        const user = await createTestUser(pool);
         const refreshToken = generateRefreshToken(user.id);
 
         await createRefreshToken(
             user.id,
             refreshToken,
             new Date(Date.now() + 60000),
-            db,
+            pool,
         );
 
-        const foundToken = await findRefreshToken(refreshToken, db);
+        const foundToken = await findRefreshToken(refreshToken, pool);
         if (!foundToken) throw new Error("no found token");
 
         expect(foundToken.userId).toBe(user.id);
@@ -36,9 +36,9 @@ describe.sequential("token repository", () => {
         expect(foundToken.revokedAt).toBe(null);
 
         // test revoking
-        await revokeRefreshToken(refreshToken, db);
+        await revokeRefreshToken(refreshToken, pool);
 
-        const revokedToken = await findRefreshToken(refreshToken, db);
+        const revokedToken = await findRefreshToken(refreshToken, pool);
         if (!revokedToken) throw new Error("no revoked token");
         if (!revokedToken.revokedAt) throw new Error("not revoked");
         expect(revokedToken.revokedAt.getTime()).toBeLessThan(Date.now());

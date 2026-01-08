@@ -4,7 +4,7 @@ import { beforeAll, afterAll, beforeEach, afterEach } from "vitest";
 import pool, { runMigrations } from "@/database";
 
 import { createTestApp } from "./testApp";
-import { resetDb } from "../reset/db";
+import { resetDb } from "../helpers";
 
 let client: PoolClient;
 let api: ReturnType<typeof createTestApp>;
