@@ -1,2 +1,2 @@
-export * from "./rules/global";
-export * from "./rules/next";
+export * from "./rules/global.js";
+export * from "./rules/next.js";

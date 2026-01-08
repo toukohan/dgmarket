@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { IsoDateString } from "./common.schema";
-export const UserRoleSchema = z.enum(["buyer", "seller", "admin"]);
+import { IsoDateString } from "./common.schema.js";
+export const UserRoleSchema = z.enum(["user", "moderator", "admin"]);
 
 export type UserRole = z.infer<typeof UserRoleSchema>;
 

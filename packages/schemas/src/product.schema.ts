@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { IsoDateString } from "./common.schema";
+import { IsoDateString } from "./common.schema.js";
 
 /**
  * Shared enums
