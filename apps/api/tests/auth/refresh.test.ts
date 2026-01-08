@@ -1,11 +1,10 @@
 import { describe, it, expect } from "vitest";
 
-import { hashToken } from "@/utils/hashing";
-import { generateRefreshToken } from "@/utils/jwt";
-
-import { createTestUser } from "../factories/user.factory";
-import { extractJwtCookies } from "../helpers";
-import { getTestApi as api, getDbClient } from "../setup/testDb";
+import { hashToken } from "../../src/utils/hashing.js";
+import { generateRefreshToken } from "../../src/utils/jwt.js";
+import { createTestUser } from "../factories/user.factory.js";
+import { extractJwtCookies } from "../helpers/index.js";
+import { getTestApi as api, getDbClient } from "../setup/testDb.js";
 
 describe.sequential("POST /api/auth/refresh", () => {
     it.sequential("returns 401 if no refresh token cookie", async () => {

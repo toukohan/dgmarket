@@ -1,10 +1,9 @@
 import { PoolClient } from "pg";
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
-import pool, { Db } from "@/database";
-import { ProductRepository } from "@/repositories/ProductRepository";
-
-import { resetDb } from "../helpers";
+import pool, { Db } from "../../src/database/index.js";
+import { ProductRepository } from "../../src/repositories/ProductRepository.js";
+import { resetDb } from "../helpers/index.js";
 
 async function createTestSeller(db: Db) {
     const { rows } = await db.query<{

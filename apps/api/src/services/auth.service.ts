@@ -1,28 +1,28 @@
+import { PublicUser, PublicUserSchema } from "@dgmarket/schemas";
 import { JwtPayload } from "jsonwebtoken";
 
-import { Db } from "@/database";
+import { Db } from "../database/index.js";
 import {
     EmailAlreadyExistsError,
     InvalidCredentialsError,
     InvalidTokenError,
     UnauthorizedError,
-} from "@/errors";
-import { PublicUser, UserRow } from "@/types/src/user";
-
+} from "../errors/index.js";
 import {
     findRefreshToken,
     revokeRefreshToken,
-} from "../repositories/token.repository";
+} from "../repositories/token.repository.js";
 import {
     findUserByEmail,
     findUserById,
     createUser,
-} from "../repositories/user.repository";
-import { hashPassword, comparePasswords } from "../utils/hashing";
+    UserRow,
+} from "../repositories/user.repository.js";
+import { hashPassword, comparePasswords } from "../utils/hashing.js";
 import {
     generateAccessToken,
     generateAndInsertRefreshToken,
-} from "../utils/jwt";
+} from "../utils/jwt.js";
 
 interface AuthResult {
     user: PublicUser;
@@ -31,9 +31,14 @@ interface AuthResult {
 }
 
 function toPublicUser(user: UserRow): PublicUser {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password_hash, ...publicData } = user;
-    return publicData;
+    return PublicUserSchema.parse({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        created_at: user.created_at.toISOString(),
+        updated_at: user.updated_at.toISOString(),
+    });
 }
 
 // create new access and refresh token and return them in an object with the user

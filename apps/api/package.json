@@ -1,9 +1,11 @@
 {
-    "name": "api",
+    "name": "@dgmarket/api",
     "version": "1.0.0",
     "description": "",
+    "type": "module",
     "main": "index.js",
     "scripts": {
+        "build": "tsc -p tsconfig.build.json",
         "dev": "tsx watch src/index.ts",
         "db:migrate": "tsx src/database/migrate.cli.ts",
         "test": "vitest"

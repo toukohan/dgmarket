@@ -1,10 +1,9 @@
 import { PoolClient } from "pg";
 import { beforeAll, afterAll, beforeEach, afterEach } from "vitest";
 
-import pool, { runMigrations } from "@/database";
-
-import { createTestApp } from "./testApp";
-import { resetDb } from "../helpers";
+import { createTestApp } from "./testApp.js";
+import pool, { runMigrations } from "../../src/database/index.js";
+import { resetDb } from "../helpers/index.js";
 
 let client: PoolClient;
 let api: ReturnType<typeof createTestApp>;

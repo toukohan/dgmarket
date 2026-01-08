@@ -1,3 +1,3 @@
-export * from "./extractJwtCookies";
-export * from "./resetDb";
-export * from "./createTestUser";
+export * from "./extractJwtCookies.js";
+export * from "./resetDb.js";
+export * from "./createTestUser.js";

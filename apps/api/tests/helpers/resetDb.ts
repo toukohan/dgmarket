@@ -1,4 +1,4 @@
-import pool from "@/database";
+import pool from "../../src/database/index.js";
 
 export const tableSets = {
     auth: ["users", "refresh_tokens"],

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import { createApp } from "./app";
-import { runMigrations } from "./database";
-import pool from "./database";
+import { createApp } from "./app.js";
+import pool, { runMigrations } from "./database/index.js";
+
 const app = createApp(pool);
 const port = process.env.PORT || 4000;
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 
-import { extractJwtCookies } from "../helpers";
-import { getTestApi as api } from "../setup/testDb";
+import { extractJwtCookies } from "../helpers/index.js";
+import { getTestApi as api } from "../setup/testDb.js";
 
 describe.sequential("POST /api/products", () => {
     it.sequential("rejects unauthenticated users", async () => {

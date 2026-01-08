@@ -1,12 +1,11 @@
 import { registerSchema, loginSchema } from "@dgmarket/schemas";
 import { Router } from "express";
 
-import { extractDb } from "@/database";
-import { InvalidTokenError, MissingTokenError } from "@/errors";
-
-import { validate } from "../middleware/validate";
-import { login, register, logout, refresh } from "../services/auth.service";
-import { verifyRefreshToken, attachAuthCookies } from "../utils/jwt";
+import { extractDb } from "../database/index.js";
+import { InvalidTokenError, MissingTokenError } from "../errors/index.js";
+import { validate } from "../middleware/validate.js";
+import { login, register, logout, refresh } from "../services/auth.service.js";
+import { verifyRefreshToken, attachAuthCookies } from "../utils/jwt.js";
 
 const router = Router();
 

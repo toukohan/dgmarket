@@ -1,5 +1,5 @@
-import { runMigrations } from "./migrate";
-import { pool } from "./pool";
+import { runMigrations } from "./migrate.js";
+import { pool } from "./pool.js";
 
 async function main() {
     try {

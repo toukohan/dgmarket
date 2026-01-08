@@ -1,10 +1,10 @@
 import { ProductCreate, ProductUpdate, ProductPublic } from "@dgmarket/schemas";
 
-import { NotFoundError, ForbiddenError } from "@/errors";
+import { NotFoundError, ForbiddenError } from "../errors/index.js";
 import {
     ProductRepository,
     ProductRow,
-} from "@/repositories/ProductRepository";
+} from "../repositories/ProductRepository.js";
 
 export class ProductService {
     constructor(private products: ProductRepository) {}

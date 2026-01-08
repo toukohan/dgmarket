@@ -4,11 +4,11 @@ import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 
-import { Db, DbRequest } from "./database";
-import { dbMiddleware } from "./middleware/dbMiddleware";
-import { errorHandler } from "./middleware/errorHandler";
-import authRouter from "./routes/authRouter";
-import productRouter from "./routes/producRouter";
+import { Db, DbRequest } from "./database/index.js";
+import { dbMiddleware } from "./middleware/dbMiddleware.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import authRouter from "./routes/authRouter.js";
+import productRouter from "./routes/producRouter.js";
 
 dotenv.config();
 

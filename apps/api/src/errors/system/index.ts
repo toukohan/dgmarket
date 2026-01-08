@@ -1,1 +1,1 @@
-export * from "./DatabaseError";
+export * from "./DatabaseError.js";

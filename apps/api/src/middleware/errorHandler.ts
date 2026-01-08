@@ -1,13 +1,8 @@
 import { ErrorRequestHandler } from "express";
 
-import { ApiError } from "@/errors";
+import { ApiError } from "../errors/index.js";
 
-export const errorHandler: ErrorRequestHandler = (
-    err,
-    _req,
-    res,
-    _next,
-) => {
+export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
     if (err instanceof ApiError) {
         return res.status(err.statusCode).json(err.serialize());
     }

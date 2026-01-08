@@ -1,4 +1,4 @@
-import { ApiError } from "../base";
+import { ApiError } from "../base/index.js";
 
 export class DatabaseError extends ApiError {
     statusCode = 503;

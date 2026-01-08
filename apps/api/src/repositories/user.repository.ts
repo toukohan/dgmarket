@@ -1,6 +1,14 @@
-import { UserRow } from "@/types/src/user";
+import { Db } from "../database/index.js";
 
-import { Db } from "../database";
+export interface UserRow {
+    id: number;
+    email: string;
+    name: string;
+    role: "user" | "admin" | "moderator";
+    password_hash: string;
+    created_at: Date;
+    updated_at: Date;
+}
 
 export async function findUserByEmail(
     email: string,

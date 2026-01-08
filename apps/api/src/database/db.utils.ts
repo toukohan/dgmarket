@@ -1,5 +1,5 @@
 // db.guard.ts
-import { Db, DbRequest } from "./db.types";
+import { Db, DbRequest } from "./db.types.js";
 
 const isDb = (value: unknown): value is Db => {
     if (typeof value !== "object" || value === null) {

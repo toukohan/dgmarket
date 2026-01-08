@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { getTestApi as api } from "../setup/testDb";
+import { getTestApi as api } from "../setup/testDb.js";
 
 describe.sequential("POST /api/auth/register", () => {
     it.sequential("valid request stores the user properly", async () => {

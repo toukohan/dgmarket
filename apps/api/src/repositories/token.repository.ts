@@ -1,19 +1,39 @@
-import { DatabaseError } from "@/errors";
-import { RefreshToken } from "@/types/src/auth";
+import { Db } from "../database/index.js";
+import { DatabaseError } from "../errors/index.js";
+import { hashToken } from "../utils/hashing.js";
 
-import { Db } from "../database";
-import { hashToken } from "../utils/hashing";
+interface RefreshTokenRow {
+    id: number;
+    user_id: number;
+    token_hash: string;
+    user_agent: string | null;
+    ip_address: string | null;
+    created_at: Date;
+    expires_at: Date;
+    revoked_at: Date | null;
+}
 
-function mapRefreshToken(row: any): RefreshToken {
+interface RefreshToken {
+    id: number;
+    userId: number;
+    tokenHash: string;
+    userAgent?: string | null;
+    ipAddress?: string | null;
+    createdAt: Date;
+    expiresAt: Date;
+    revokedAt?: Date | null;
+}
+
+function mapRefreshToken(row: RefreshTokenRow): RefreshToken {
     return {
         id: row.id,
         userId: row.user_id,
         tokenHash: row.token_hash,
         userAgent: row.user_agent,
         ipAddress: row.ip_address,
-        createdAt: new Date(row.created_at),
-        expiresAt: new Date(row.expires_at),
-        revokedAt: row.revoked_at ? new Date(row.revoked_at) : null,
+        createdAt: row.created_at,
+        expiresAt: row.expires_at,
+        revokedAt: row.revoked_at,
     };
 }
 

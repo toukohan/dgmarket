@@ -1,10 +1,12 @@
 import { ProductCreateSchema } from "@dgmarket/schemas";
 import { NextFunction, Router } from "express";
 
-import { UnauthorizedError } from "@/errors";
-import { createProduct } from "@/services/product.service";
-
-import { authenticate, AuthenticatedRequest } from "../middleware/authenticate";
+import { UnauthorizedError } from "../errors/index.js";
+import {
+    authenticate,
+    AuthenticatedRequest,
+} from "../middleware/authenticate.js";
+import { createProduct } from "../services/product.service.js";
 
 const router = Router();
 

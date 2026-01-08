@@ -1,4 +1,4 @@
-import { Db } from "@/database";
+import { Db } from "../database/index.js";
 
 export type ProductRow = {
     id: number;

@@ -1,4 +1,4 @@
-import { Db } from "@/database";
+import { Db } from "../../src/database/index.js";
 
 export async function createTestUser(db: Db) {
     const { rows } = await db.query<{

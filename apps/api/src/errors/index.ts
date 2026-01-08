@@ -1,3 +1,3 @@
-export * from "./base";
-export * from "./auth";
-export * from "./system";
+export * from "./base/index.js";
+export * from "./auth/index.js";
+export * from "./system/index.js";

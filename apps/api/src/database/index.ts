@@ -1,6 +1,6 @@
-import { pool } from "./pool";
-export * from "./migrate";
-export * from "./db.utils";
-export * from "./db.types";
+import { pool } from "./pool.js";
+export * from "./migrate.js";
+export * from "./db.utils.js";
+export * from "./db.types.js";
 
 export default pool;

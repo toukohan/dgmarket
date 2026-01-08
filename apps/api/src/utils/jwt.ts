@@ -1,12 +1,11 @@
+import { UserRole } from "@dgmarket/schemas";
 import { Response } from "express";
 import fs from "fs";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import path from "path";
 
-import pool, { Db } from "@/database";
-import { UserRole } from "@/types/src/user";
-
-import { createRefreshToken } from "../repositories/token.repository";
+import pool, { Db } from "../database/index.js";
+import { createRefreshToken } from "../repositories/token.repository.js";
 
 export interface AccessTokenPayload {
     userId: number;

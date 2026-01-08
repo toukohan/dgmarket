@@ -1,6 +1,6 @@
 import { ProductCreate } from "@dgmarket/schemas";
 
-import { createProduct as createProductRepo } from "../repositories/product.repository";
+import { createProduct as createProductRepo } from "../repositories/product.repository.js";
 
 export type PublicProduct = {
     id: number;

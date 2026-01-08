@@ -1,16 +1,15 @@
 import { describe, it, expect, beforeEach } from "vitest";
 
-import pool from "@/database";
-
+import pool from "../../src/database/index.js";
 import {
     createRefreshToken,
     findRefreshToken,
     revokeRefreshToken,
-} from "../../src/repositories/token.repository";
-import { hashToken } from "../../src/utils/hashing";
-import { generateRefreshToken } from "../../src/utils/jwt";
-import { createTestUser } from "../factories/user.factory";
-import { resetDb } from "../helpers";
+} from "../../src/repositories/token.repository.js";
+import { hashToken } from "../../src/utils/hashing.js";
+import { generateRefreshToken } from "../../src/utils/jwt.js";
+import { createTestUser } from "../factories/user.factory.js";
+import { resetDb } from "../helpers/index.js";
 
 describe.sequential("token repository", () => {
     beforeEach(async () => {

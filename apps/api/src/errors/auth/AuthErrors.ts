@@ -1,4 +1,8 @@
-import { ConflictError, UnauthorizedError, ForbiddenError } from "../base";
+import {
+    ConflictError,
+    UnauthorizedError,
+    ForbiddenError,
+} from "../base/index.js";
 
 export class EmailAlreadyExistsError extends ConflictError {
     constructor() {
