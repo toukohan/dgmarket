@@ -1,7 +1,7 @@
 import { DatabaseError } from "@/errors";
 import { RefreshToken } from "@/types/src/auth";
 
-import pool from "../database";
+import { Db } from "../database";
 import { hashToken } from "../utils/hashing";
 
 function mapRefreshToken(row: any): RefreshToken {
@@ -21,12 +21,13 @@ export async function createRefreshToken(
     userId: number,
     token: string,
     expiresAt: Date,
+    db: Db,
     userAgent?: string,
     ipAddress?: string,
 ) {
     const tokenHash = hashToken(token);
     try {
-        await pool.query(
+        await db.query(
             `INSERT INTO refresh_tokens (user_id, token_hash, expires_at, user_agent, ip_address)
       VALUES ($1, $2, $3, $4, $5)`,
             [userId, tokenHash, expiresAt, userAgent, ipAddress],
@@ -39,9 +40,10 @@ export async function createRefreshToken(
 
 export async function findRefreshToken(
     token: string,
+    db: Db,
 ): Promise<RefreshToken | undefined> {
     const tokenHash = hashToken(token);
-    const { rows } = await pool.query(
+    const { rows } = await db.query(
         `SELECT * FROM refresh_tokens WHERE token_hash = $1`,
         [tokenHash],
     );
@@ -53,19 +55,29 @@ export async function findRefreshToken(
 
 export async function getRefreshTokenDatabaseValues(
     token: string,
+    db: Db,
 ): Promise<RefreshToken | undefined> {
     const tokenHash = hashToken(token);
-    const { rows } = await pool.query(
+    const { rows } = await db.query(
         `SELECT * FROM refresh_tokens WHERE token_hash = $1`,
         [tokenHash],
     );
     return rows[0];
 }
 
-export async function revokeRefreshToken(token: string) {
+export async function revokeRefreshToken(
+    token: string,
+    db: Db,
+): Promise<boolean> {
     const tokenHash = hashToken(token);
-    await pool.query(
-        `UPDATE refresh_tokens SET revoked_at = NOW() WHERE token_hash = $1`,
+    const result = await db.query(
+        `UPDATE refresh_tokens 
+         SET revoked_at = NOW() 
+         WHERE token_hash = $1
+         AND revoked_at IS NULL`,
         [tokenHash],
     );
+
+    //for testing
+    return result.rowCount === 1;
 }

@@ -20,8 +20,10 @@
             "@/types/*": ["../../packages/types/*"],
             "@/api/*": ["../../packages/api-client/*"],
             "@/schemas/*": ["../../packages/schemas/*"]
-        }
+        },
+
+        "typeRoots": ["node_modules/@types", "src/types"]
     },
-    "include": ["src/**/*", "tests/**/*", "vite.config.ts"],
+    "include": ["src/**/*", "tests/**/*", "vite.config.ts", "src/types/*"],
     "exclude": ["node_modules", "dist"]
 }

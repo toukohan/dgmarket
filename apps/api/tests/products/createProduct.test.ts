@@ -1,16 +1,11 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 
-import { register } from "../../src/services/auth.service";
-import { resetDb } from "../reset/db";
-import { api } from "../setup/testApp";
+import { extractJwtCookies } from "../helpers";
+import { getTestApi as api } from "../setup/testDb";
 
-describe("POST /api/products", () => {
-    beforeEach(async () => {
-        await resetDb();
-    });
-
-    it("rejects unauthenticated users", async () => {
-        const res = await api.post("/api/products").send({
+describe.sequential("POST /api/products", () => {
+    it.sequential("rejects unauthenticated users", async () => {
+        const res = await api().post("/api/products").send({
             name: "Destroyer",
             description: "Fast distance driver",
             priceCents: 1799,
@@ -20,14 +15,16 @@ describe("POST /api/products", () => {
         expect(res.status).toBe(401);
     });
 
-    it("rejects missing required fields", async () => {
-        const { accessToken } = await register(
-            "seller@mail.com",
-            "strongpassword",
-            "Seller",
-        );
+    it.sequential("rejects missing required fields", async () => {
+        const registerRes = await api().post("/api/auth/register").send({
+            name: "Simon Seller",
+            email: "seller@mail.com",
+            password: "strongish",
+        });
 
-        const res = await api
+        const { accessToken } = extractJwtCookies(registerRes);
+
+        const res = await api()
             .post("/api/products")
             .set("Cookie", `accessToken=${accessToken}`)
             .send({
@@ -39,14 +36,16 @@ describe("POST /api/products", () => {
         expect(res.body.error).toBeDefined();
     });
 
-    it("creates a product for an authenticated seller", async () => {
-        const { accessToken } = await register(
-            "seller1@mail.com",
-            "strongpassword",
-            "Seller",
-        );
+    it.sequential("creates a product for an authenticated seller", async () => {
+        const registerReq = await api().post("/api/auth/register").send({
+            name: "Simon Seller",
+            email: "seller@mail.com",
+            password: "strongish",
+        });
 
-        const res = await api
+        const { accessToken } = extractJwtCookies(registerReq);
+
+        const res = await api()
             .post("/api/products")
             .set("Cookie", `accessToken=${accessToken}`)
             .send({

@@ -18,16 +18,15 @@ export async function runMigrations() {
         .filter((f) => f.endsWith(".sql"))
         .sort();
 
-    console.log("migrate files:", files);
     const { rows } = await pool.query("SELECT name FROM migrations");
     const ran = new Set(rows.map((r) => r.name));
-    console.log("migrations ran:", ran);
+
     for (const file of files) {
         if (ran.has(file)) continue;
 
         const sql = fs.readFileSync(path.join(migrationsDir, file), "utf8");
 
-        console.log(`Running migration: ${file}`);
+        //console.log(`Running migration: ${file}`);
         await pool.query("BEGIN");
         try {
             await pool.query(sql);

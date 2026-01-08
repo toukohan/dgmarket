@@ -3,6 +3,7 @@ import fs from "fs";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import path from "path";
 
+import pool, { Db } from "@/database";
 import { UserRole } from "@/types/src/user";
 
 import { createRefreshToken } from "../repositories/token.repository";
@@ -33,7 +34,7 @@ const publicAccessKey = loadKey("ACCESS_PUBLIC_KEY_PATH");
 const publicRefreshKey = loadKey("REFRESH_PUBLIC_KEY_PATH");
 
 export const generateAccessToken = (payload: AccessTokenPayload) =>
-    jwt.sign(payload, privateAccessKey, {
+    jwt.sign({ ...payload, createdAt: Date.now() }, privateAccessKey, {
         algorithm: "RS256",
         expiresIn: ACCESS_TOKEN_EXP,
     });
@@ -46,13 +47,17 @@ export const generateRefreshToken = (userId: number) => {
     });
 };
 
-export const generateAndInsertRefreshToken = async (userId: number) => {
+export const generateAndInsertRefreshToken = async (
+    userId: number,
+    db: Db = pool,
+) => {
     const token = generateRefreshToken(userId);
     // save token to db
     await createRefreshToken(
         userId,
         token,
         new Date(Date.now() + REFRESH_TOKEN_EXP * 1000),
+        db,
     );
     return token;
 };
@@ -62,7 +67,7 @@ export const verifyAccessToken = (token: string) => {
         return jwt.verify(token, publicAccessKey, {
             algorithms: ["RS256"],
         }) as JwtPayload;
-    } catch (err) {
+    } catch {
         return undefined;
     }
 };
@@ -72,7 +77,7 @@ export const verifyRefreshToken = (token: string) => {
         return jwt.verify(token, publicRefreshKey, {
             algorithms: ["RS256"],
         }) as JwtPayload;
-    } catch (err) {
+    } catch {
         return undefined;
     }
 };

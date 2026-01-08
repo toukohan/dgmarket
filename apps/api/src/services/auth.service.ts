@@ -1,5 +1,6 @@
 import { JwtPayload } from "jsonwebtoken";
 
+import { Db } from "@/database";
 import {
     EmailAlreadyExistsError,
     InvalidCredentialsError,
@@ -38,52 +39,62 @@ function toPublicUser(user: UserRow): PublicUser {
 // create new access and refresh token and return them in an object with the user
 async function generateTokensAndBundleResult(
     user: UserRow,
+    db: Db,
 ): Promise<AuthResult> {
     return {
         user: toPublicUser(user),
         accessToken: generateAccessToken({ userId: user.id, role: user.role }),
-        refreshToken: await generateAndInsertRefreshToken(user.id),
+        refreshToken: await generateAndInsertRefreshToken(user.id, db),
     };
 }
 
-export async function register(email: string, password: string, name: string) {
-    const existingUser = await findUserByEmail(email);
+export async function register(
+    email: string,
+    password: string,
+    name: string,
+    db: Db,
+) {
+    const existingUser = await findUserByEmail(email, db);
     if (existingUser) throw new EmailAlreadyExistsError();
 
     // hash the password before saving user
     const passwordHash = await hashPassword(password);
-    const user = await createUser({ email, name, passwordHash });
+    const user = await createUser(email, name, passwordHash, db);
 
-    return generateTokensAndBundleResult(user);
+    return generateTokensAndBundleResult(user, db);
 }
 
-export async function login(email: string, password: string) {
-    const user = await findUserByEmail(email);
+export async function login(email: string, password: string, db: Db) {
+    const user = await findUserByEmail(email, db);
     if (!user) throw new InvalidCredentialsError();
 
     const ok = await comparePasswords(password, user.password_hash);
     if (!ok) throw new InvalidCredentialsError();
 
-    return generateTokensAndBundleResult(user);
+    return generateTokensAndBundleResult(user, db);
 }
 
-export async function refresh(refreshToken: string, payload: JwtPayload) {
-    const session = await findRefreshToken(refreshToken);
+export async function refresh(
+    refreshToken: string,
+    payload: JwtPayload,
+    db: Db,
+) {
+    const session = await findRefreshToken(refreshToken, db);
     if (!session) throw new UnauthorizedError("No stored token");
     if (session.revokedAt) throw new UnauthorizedError("Token revoked");
     if (session.expiresAt < new Date())
         throw new UnauthorizedError("Token expired");
-    const user = await findUserById(session.userId);
+    const user = await findUserById(session.userId, db);
 
     if (!user) throw new UnauthorizedError("No matching user");
     if (user.id != payload.userId)
         throw new InvalidTokenError("User does not match");
 
     // revoke the previous token
-    await revokeRefreshToken(refreshToken);
-    return generateTokensAndBundleResult(user);
+    await revokeRefreshToken(refreshToken, db);
+    return generateTokensAndBundleResult(user, db);
 }
 
-export async function logout(refreshToken: string) {
-    await revokeRefreshToken(refreshToken);
+export async function logout(refreshToken: string, db: Db): Promise<boolean> {
+    return await revokeRefreshToken(refreshToken, db);
 }

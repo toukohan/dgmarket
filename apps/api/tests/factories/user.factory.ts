@@ -1,7 +1,7 @@
-import pool from "../../src/database";
+import { Db } from "../../src/database";
 
-export async function createTestUser(overrides = {}) {
-    const res = await pool.query(
+export async function createTestUser(db: Db, overrides = {}) {
+    const res = await db.query(
         `INSERT INTO users (email, role, name, password_hash)
      VALUES ($1, $2, $3, $4)
      RETURNING *`,

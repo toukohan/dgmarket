@@ -4,19 +4,18 @@ import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 
+import { Db, DbRequest } from "./database";
+import { dbMiddleware } from "./middleware/dbMiddleware";
 import { errorHandler } from "./middleware/errorHandler";
 import authRouter from "./routes/authRouter";
 import productRouter from "./routes/producRouter";
 
+dotenv.config();
 
-dotenv.config({
-    path: "./.env.test"
-})
-export function createApp(env: string = "dev") {
-
-    console.log("db:", process.env.POSTGRES_DB)
-
+export function createApp(db: Db) {
     const app = express();
+    app.use(dbMiddleware(db));
+
     app.use(
         helmet({
             contentSecurityPolicy: false, // for development
@@ -32,7 +31,8 @@ export function createApp(env: string = "dev") {
     app.use(cors(corsOptions));
     app.use(cookieParser());
     app.use(express.json());
-    app.get("/api/health", (_req, res) => {
+
+    app.get("/api/health", (req: DbRequest, res) => {
         res.json({ ok: true });
     });
     app.use("/api/auth", authRouter);

@@ -1,7 +1,9 @@
 import request from "supertest";
 
-import { createApp } from "../../src/app";
-// pass in test to run with test env
+import { createApp } from "@/app";
+import { Db } from "@/database";
 
-export const app = createApp("test");
-export const api = request(app);
+export function createTestApp(db: Db) {
+    const app = createApp(db);
+    return request(app);
+}

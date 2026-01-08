@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 import { createApp } from "./app";
 import { runMigrations } from "./database";
-
-const app = createApp("test");
-const port = process.env.PORT || 3000;
+import pool from "./database";
+const app = createApp(pool);
+const port = process.env.PORT || 4000;
 
 const start = async () => {
     try {
