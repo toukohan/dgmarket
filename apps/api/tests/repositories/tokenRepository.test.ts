@@ -9,11 +9,11 @@ import {
 import { hashToken } from "../../src/utils/hashing.js";
 import { generateRefreshToken } from "../../src/utils/jwt.js";
 import { createTestUser } from "../factories/user.factory.js";
-import { resetDb } from "../helpers/index.js";
+import { resetTestData } from "../helpers/index.js";
 
 describe.sequential("token repository", () => {
     beforeEach(async () => {
-        await resetDb();
+        await resetTestData();
     });
     it.sequential("stores refresh token with users id", async () => {
         const user = await createTestUser(pool);
