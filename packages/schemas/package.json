@@ -8,12 +8,6 @@
     "dependencies": {
         "zod": "^4.3.5"
     },
-    "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "default": "./dist/index.js"
-        }
-    },
     "scripts": {
         "build": "tsc -p tsconfig.build.json"
     }
