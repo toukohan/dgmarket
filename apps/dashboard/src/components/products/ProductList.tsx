@@ -3,8 +3,19 @@ import { useEffect, useState } from "react";
 import { api } from "@dgmarket/api-client";
 import { useAuth } from "@/store/authContext";
 
-import type { ProductPublic } from "@dgmarket/schemas";
-import ProductCreateForm from "./ProductCreateForm";
+import type { ProductPublic, ProductCreate, ProductUpdate } from "@dgmarket/schemas";
+import ProductForm from "./ProductForm";
+import ProductRow
+ from "./ProductRow";
+function publicToFormValues(product: ProductPublic): ProductCreate {
+  return {
+    name: product.name,
+    description: product.description,
+    priceCents: product.priceCents,
+    condition: product.condition,
+  };
+}
+
 export default function ProductList() {
   const { user, logout } = useAuth();
 
@@ -14,6 +25,8 @@ export default function ProductList() {
 
   const [creating, setCreating] = useState(false);
 
+  const [editingProduct, setEditingProduct] =
+    useState<ProductPublic | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -35,6 +48,32 @@ export default function ProductList() {
       .finally(() => setLoading(false));
   }, [user]);
 
+  const handleDelete = async (product: ProductPublic) => {
+    const confirmed = window.confirm(
+      `Delete "${product.name}"? This cannot be undone.`,
+    );
+  
+    if (!confirmed) return;
+  
+    try {
+      await api.delete(`/products/${product.id}`);
+  
+      setProducts((prev) =>
+        prev.filter((p) => p.id !== product.id),
+      );
+      // empty editstate on delete
+      if (editingProduct?.id === product.id) {
+        setEditingProduct(null);
+      }
+    } catch (err: any) {
+      if (err.isAuthExpired) {
+        logout();
+      } else {
+        alert("Failed to delete product");
+      }
+    }
+  };
+  
   if (loading) return <div>Loading products…</div>;
   if (error) return <div className="text-red-500">{error}</div>;
 
@@ -45,7 +84,14 @@ export default function ProductList() {
         <button onClick={() => setCreating(true)}>Add product</button>
       </div>
       {creating && (
-        <ProductCreateForm
+        <ProductForm
+          mode="create"
+          initialValues={{
+            name: "",
+            description: null,
+            priceCents: 0,
+            condition: "used",
+          }}
           onCancel={() => setCreating(false)}
           onSuccess={(product) => {
             setProducts((prev) => [product, ...prev]);
@@ -53,25 +99,37 @@ export default function ProductList() {
           }}
         />
       )}
+
       {products.length === 0 ? (
         <p>No products yet.</p>
       ) : (
         <ul className="space-y-2">
           {products.map((product) => (
-            <li
-              key={product.id}
-              className="border rounded p-3 flex justify-between"
-            >
-              <div>
-                <div className="font-medium">{product.name}</div>
-                <div className="text-sm text-muted-foreground">
-                  €{product.priceCents}
-                </div>
-              </div>
-              <button className="btn-secondary">Edit</button>
+            <li key={product.id}>
+              {editingProduct?.id === product.id ? (
+                <ProductForm
+                  mode="edit"
+                  productId={product.id}
+                  initialValues={publicToFormValues(product)}
+                  onCancel={() => setEditingProduct(null)}
+                  onSuccess={(updated) => {
+                    setProducts((prev) =>
+                      prev.map((p) => (p.id === updated.id ? updated : p)),
+                    );
+                    setEditingProduct(null);
+                  }}
+                />
+              ) : (
+                <ProductRow
+                  product={product}
+                  onEdit={() => setEditingProduct(product)}
+                  onDelete={() => handleDelete(product)}
+                />
+              )}
             </li>
           ))}
         </ul>
+
       )}
     </div>
   );
