@@ -2,22 +2,13 @@ import { PoolClient } from "pg";
 import { beforeAll, afterAll, beforeEach, afterEach } from "vitest";
 
 import { createTestApp } from "./testApp.js";
-import pool, { runMigrations } from "../../src/database/index.js";
+import pool from "../../src/database/index.js";
 import { resetTestData } from "../helpers/index.js";
 
 let client: PoolClient;
 let api: ReturnType<typeof createTestApp>;
-let migrated = false;
 
 beforeAll(async () => {
-    if (process.env.NODE_ENV !== "test") {
-        throw new Error("Tests must run with NODE_ENV=test");
-    }
-
-    if (!migrated) {
-        await runMigrations();
-        migrated = true;
-    }
     await resetTestData();
 });
 

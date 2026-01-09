@@ -15,12 +15,6 @@
         "isolatedModules": true,
         "jsx": "react-jsx",
         "baseUrl": ".",
-        "paths": {
-            "@/*": ["src/*"],
-            "@/types/*": ["../../packages/types/*"],
-            "@/api/*": ["../../packages/api-client/*"],
-            "@/schemas/*": ["../../packages/schemas/*"]
-        },
 
         "typeRoots": ["src/types", "node_modules/@types"]
     },

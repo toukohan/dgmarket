@@ -12,6 +12,7 @@ export default defineConfig({
         environment: "node",
         root: ".",
         // run env first to make sure setup uses different database
+        globalSetup: ["./tests/setup/globalSetup.ts"],
         setupFiles: [
             "./tests/setup/env.ts",
             "./tests/setup/testApp.ts",
