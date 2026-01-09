@@ -13,8 +13,8 @@ export type ProductCondition = z.infer<typeof ProductConditionSchema>;
  */
 export const ProductCreateSchema = z.object({
     name: z.string().min(1),
-    description: z.string().optional(),
-    priceCents: z.number().int().positive(),
+    description: z.string().nullable().optional(),
+    priceCents: z.number().int().nonnegative(),
     condition: ProductConditionSchema,
 });
 
@@ -40,8 +40,8 @@ export type ProductUpdate = z.infer<typeof ProductUpdateSchema>;
 export const ProductPublicSchema = z.object({
     id: z.number().int(),
     name: z.string(),
-    description: z.string().nullable(),
-    priceCents: z.number().int(),
+    description: z.string().nullable().optional(),
+    priceCents: z.number().int().nonnegative(),
     condition: ProductConditionSchema,
     createdAt: IsoDateString,
     updatedAt: IsoDateString,
