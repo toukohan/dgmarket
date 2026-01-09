@@ -14,7 +14,7 @@ export type ProductRow = {
 type CreateProductInput = {
     sellerId: number;
     name: string;
-    description?: string;
+    description?: string | null;
     priceCents: number;
     condition: "new" | "used";
 };
@@ -22,7 +22,7 @@ type CreateProductInput = {
 type UpdateProductInput = {
     productId: number;
     name?: string;
-    description?: string;
+    description?: string | null;
     priceCents?: number;
     condition?: "new" | "used";
 };
