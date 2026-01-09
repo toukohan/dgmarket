@@ -5,13 +5,8 @@ export const tableSets = {
 };
 
 export async function resetDb(tables: string[] = tableSets.auth) {
-    if (
-        process.env.POSTGRES_DB !== "dgm_test" &&
-        process.env.POSTGRES_DB !== "test_db"
-    ) {
-        throw new Error(
-            `resetDb can only run against test database ${process.env.POSTGRES_DB}`,
-        );
+    if (process.env.NODE_ENV !== "test") {
+        throw new Error("resetDb can only be run when NODE_ENV=test");
     }
     await pool.query(`
     TRUNCATE TABLE ${tables.join(", ")}

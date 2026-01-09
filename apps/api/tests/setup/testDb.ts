@@ -9,7 +9,6 @@ let client: PoolClient;
 let api: ReturnType<typeof createTestApp>;
 
 beforeAll(async () => {
-    await runMigrations();
     await resetDb();
 });
 

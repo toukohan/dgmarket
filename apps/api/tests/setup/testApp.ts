@@ -1,7 +1,7 @@
 import request from "supertest";
 
-import { createApp } from "@/app";
-import { Db } from "@/database";
+import { createApp } from "../../src/app.js";
+import { Db } from "../../src/database/index.js";
 
 export function createTestApp(db: Db) {
     const app = createApp(db);
