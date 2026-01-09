@@ -16,7 +16,10 @@ api.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
         const originalRequest = error.config as any;
-
+        //  Never refresh on auth endpoints
+        if (originalRequest?.url?.startsWith("/auth/")) {
+            return Promise.reject(error);
+        }
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
