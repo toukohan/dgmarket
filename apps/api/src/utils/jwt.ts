@@ -1,9 +1,8 @@
 import { UserRole } from "@dgmarket/schemas";
 import { Response } from "express";
-import fs from "fs";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import path from "path";
 
+import { loadJwtKeys } from "./jwtKeys.js";
 import pool, { Db } from "../database/index.js";
 import { createRefreshToken } from "../repositories/token.repository.js";
 
@@ -17,20 +16,12 @@ const REFRESH_TOKEN_EXP = 7 * 24 * 60 * 60; // 7 days in seconds
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
-function loadKey(envName: string) {
-    const p = process.env[envName];
-    if (!p) throw new Error(`${envName} is not set`);
-    const joined = path.join(process.cwd(), p);
-    return fs.readFileSync(joined, "utf8");
-}
-
-// Private keys for signing
-const privateAccessKey = loadKey("ACCESS_PRIVATE_KEY_PATH");
-const privateRefreshKey = loadKey("REFRESH_PRIVATE_KEY_PATH");
-
-// Public keys for verification
-const publicAccessKey = loadKey("ACCESS_PUBLIC_KEY_PATH");
-const publicRefreshKey = loadKey("REFRESH_PUBLIC_KEY_PATH");
+const {
+    privateAccessKey,
+    publicAccessKey,
+    privateRefreshKey,
+    publicRefreshKey,
+} = loadJwtKeys();
 
 export const generateAccessToken = (payload: AccessTokenPayload) =>
     jwt.sign({ ...payload, createdAt: Date.now() }, privateAccessKey, {
