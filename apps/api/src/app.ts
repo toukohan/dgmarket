@@ -7,13 +7,18 @@ import helmet from "helmet";
 import { Db, DbRequest } from "./database/index.js";
 import { dbMiddleware } from "./middleware/dbMiddleware.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { ProductRepository } from "./repositories/ProductRepository.js";
 import authRouter from "./routes/authRouter.js";
-import productRouter from "./routes/producRouter.js";
+import { productRouter } from "./routes/producRouter.js";
+import { ProductService } from "./services/ProductService.js";
 
 dotenv.config();
 
 export function createApp(db: Db) {
     const app = express();
+    const productRepository = new ProductRepository(db);
+    const productService = new ProductService(productRepository);
+
     app.use(dbMiddleware(db));
 
     app.use(
@@ -36,7 +41,7 @@ export function createApp(db: Db) {
         res.json({ ok: true });
     });
     app.use("/api/auth", authRouter);
-    app.use("/api/products", productRouter);
+    app.use("/api/products", productRouter(productService));
     app.use(errorHandler);
     return app;
 }

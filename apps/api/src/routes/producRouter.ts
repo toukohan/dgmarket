@@ -1,37 +1,116 @@
-import { ProductCreateSchema } from "@dgmarket/schemas";
-import { NextFunction, Router } from "express";
+import { ProductCreateSchema, ProductUpdateSchema } from "@dgmarket/schemas";
+import { Router } from "express";
 
 import { UnauthorizedError } from "../errors/index.js";
 import {
     authenticate,
     AuthenticatedRequest,
 } from "../middleware/authenticate.js";
-import { createProduct } from "../services/product.service.js";
+import { ProductService } from "../services/ProductService.js";
 
-const router = Router();
+export function productRouter(productService: ProductService) {
+    const router = Router();
 
-router.post(
-    "/",
-    authenticate,
-    async (req: AuthenticatedRequest, res, next: NextFunction) => {
+    /* ------------------------------------------------------------------
+     * Public routes
+     * ------------------------------------------------------------------ */
+
+    // Buyer: list all products
+    router.get("/", async (_req, res) => {
+        const products = await productService.getPublicProducts();
+        res.json(products);
+    });
+
+    /* ------------------------------------------------------------------
+     * Seller routes (auth required)
+     * ------------------------------------------------------------------ */
+
+    // Seller: create product
+    router.post("/", authenticate, async (req: AuthenticatedRequest, res) => {
         if (!req.userId) {
             throw new UnauthorizedError("Missing userId");
         }
-        const result = ProductCreateSchema.safeParse(req.body);
 
+        const result = ProductCreateSchema.safeParse(req.body);
         if (!result.success) {
             return res.status(400).json({
                 error: "Invalid product data",
                 issues: result.error.issues,
             });
         }
-        try {
-            const product = await createProduct(req.userId, req.body);
-            res.status(201).json(product);
-        } catch (err) {
-            next(err);
-        }
-    },
-);
 
-export default router;
+        const product = await productService.createProduct(
+            req.userId,
+            result.data,
+        );
+
+        res.status(201).json(product);
+    });
+
+    // Seller: list own products
+    router.get(
+        "/mine",
+        authenticate,
+        async (req: AuthenticatedRequest, res) => {
+            if (!req.userId) {
+                throw new UnauthorizedError("Missing userId");
+            }
+
+            const products = await productService.getSellerProducts(req.userId);
+            res.json(products);
+        },
+    );
+
+    // Seller: update product
+    router.patch(
+        "/:productId",
+        authenticate,
+        async (req: AuthenticatedRequest, res) => {
+            if (!req.userId) {
+                throw new UnauthorizedError("Missing userId");
+            }
+
+            const productId = Number(req.params.productId);
+            if (Number.isNaN(productId)) {
+                return res.status(400).json({ error: "Invalid productId" });
+            }
+
+            const result = ProductUpdateSchema.safeParse(req.body);
+            if (!result.success) {
+                return res.status(400).json({
+                    error: "Invalid product data",
+                    issues: result.error.issues,
+                });
+            }
+
+            const product = await productService.updateProduct(
+                productId,
+                req.userId,
+                result.data,
+            );
+
+            res.json(product);
+        },
+    );
+
+    // Seller: delete product
+    router.delete(
+        "/:productId",
+        authenticate,
+        async (req: AuthenticatedRequest, res) => {
+            if (!req.userId) {
+                throw new UnauthorizedError("Missing userId");
+            }
+
+            const productId = Number(req.params.productId);
+            if (Number.isNaN(productId)) {
+                return res.status(400).json({ error: "Invalid productId" });
+            }
+
+            await productService.deleteProduct(productId, req.userId);
+            res.status(204).send();
+        },
+    );
+
+    return router;
+}
