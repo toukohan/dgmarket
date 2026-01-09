@@ -1,31 +1,14 @@
 import { PoolClient } from "pg";
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
-import pool, { Db } from "../../src/database/index.js";
+import pool from "../../src/database/index.js";
 import { ProductRepository } from "../../src/repositories/ProductRepository.js";
-import { resetTestData } from "../helpers/index.js";
+import { createTestSeller } from "../helpers/index.js";
 
-async function createTestSeller(db: Db) {
-    const { rows } = await db.query<{
-        id: number;
-    }>(
-        `
-      INSERT INTO users (email, name, password_hash)
-      VALUES ($1, $2, $3)
-      RETURNING id
-      `,
-        [
-            `seller-${crypto.randomUUID()}@test.com`,
-            "Test Seller",
-            "hashed-password",
-        ],
-    );
+let repo: ProductRepository;
+let client: PoolClient;
 
-    return rows[0].id;
-}
 describe("ProductRepository", () => {
-    let repo: ProductRepository;
-    let client: PoolClient;
     beforeEach(async () => {
         client = await pool.connect();
         await client.query("BEGIN");

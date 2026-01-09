@@ -8,7 +8,7 @@ import {
 } from "../../src/repositories/token.repository.js";
 import { hashToken } from "../../src/utils/hashing.js";
 import { generateRefreshToken } from "../../src/utils/jwt.js";
-import { createTestUser } from "../factories/user.factory.js";
+import { createTestUser } from "../helpers/index.js";
 import { resetTestData } from "../helpers/index.js";
 
 describe.sequential("token repository", () => {

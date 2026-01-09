@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 
 import { hashToken } from "../../src/utils/hashing.js";
 import { generateRefreshToken } from "../../src/utils/jwt.js";
-import { createTestUser } from "../factories/user.factory.js";
+import { createTestUser } from "../helpers/index.js";
 import { extractJwtCookies } from "../helpers/index.js";
 import { getTestApi as api, getDbClient } from "../setup/testDb.js";
 
