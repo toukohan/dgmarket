@@ -1,5 +1,5 @@
 import AuthForms from "./components/AuthForms";
-import ProductList from "./components/ProductList";
+import ProductList from "./components/products/ProductList";
 import { Button } from "./components/ui/button";
 import { useAuth } from "./store/authContext";
 

@@ -30,6 +30,8 @@ api.interceptors.response.use(
                     .catch((err) => {
                         isRefreshing = false;
                         refreshPromise = null;
+
+                        err.isAuthExpired = true;
                         throw err;
                     });
             }
