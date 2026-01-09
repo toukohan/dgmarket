@@ -5,7 +5,10 @@ export const tableSets = {
 };
 
 export async function resetDb(tables: string[] = tableSets.auth) {
-    if (process.env.POSTGRES_DB !== "dgm_test") {
+    if (
+        process.env.POSTGRES_DB !== "dgm_test" &&
+        process.env.POSTGRES_DB !== "test_db"
+    ) {
         throw new Error(
             `resetDb can only run against test database ${process.env.POSTGRES_DB}`,
         );
