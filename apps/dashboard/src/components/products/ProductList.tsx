@@ -4,13 +4,16 @@ import { api } from "@dgmarket/api-client";
 import { useAuth } from "@/store/authContext";
 
 import type { ProductPublic } from "@dgmarket/schemas";
-
+import ProductCreateForm from "./ProductCreateForm";
 export default function ProductList() {
   const { user, logout } = useAuth();
 
   const [products, setProducts] = useState<ProductPublic[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [creating, setCreating] = useState(false);
+
 
   useEffect(() => {
     if (!user) return;
@@ -39,9 +42,17 @@ export default function ProductList() {
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Your products</h2>
-        <button className="btn-primary">Add product</button>
+        <button onClick={() => setCreating(true)}>Add product</button>
       </div>
-
+      {creating && (
+        <ProductCreateForm
+          onCancel={() => setCreating(false)}
+          onSuccess={(product) => {
+            setProducts((prev) => [product, ...prev]);
+            setCreating(false);
+          }}
+        />
+      )}
       {products.length === 0 ? (
         <p>No products yet.</p>
       ) : (
