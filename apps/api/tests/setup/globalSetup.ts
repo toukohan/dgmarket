@@ -6,8 +6,8 @@ export default async function setup() {
         throw new Error("Tests must run with NODE_ENV=test");
     }
 
+    console.log("VITEST GLOBAL SETUP: migrated:", migrated); // checking if it's ran more than once
     if (!migrated) {
-        console.log("VITEST GLOBAL SETUP: migrated:", migrated);
         await runMigrations();
         migrated = true;
     }

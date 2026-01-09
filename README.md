@@ -1,3 +1,7 @@
+[![API Tests](https://github.com/toukohan/dgmarket/actions/workflows/api-tests.yml/badge.svg)](https://github.com/toukohan/dgmarket/actions/workflows/api-tests.yml)
+
+
+
 # Disc Golf Marketplace
 
 A monorepo-based marketplace platform for disc golf products, built with a clear separation between buyer, seller, and backend concerns.
