@@ -22,10 +22,8 @@ export default function AuthForms() {
         password: "",
         confirmPassword: "",
     });
-    const [errors, setErrors] = useState<Record<string, string | undefined>>(
-        {},
-    );
-    const { login, register } = useAuth();
+    const [errors, setErrors] = useState<Record<string, string | undefined>>({});
+    const { login, register, loading, authError } = useAuth();
 
     const handleInputChange = (identifier: string, value: string) => {
         setFormInput((prev) => ({
@@ -34,18 +32,11 @@ export default function AuthForms() {
         }));
     };
 
-    const validateInput = <M extends Mode>(
-        mode: M,
-        identifier: SchemaKeys<M>,
-        value: unknown,
-    ) => {
+    const validateInput = <M extends Mode>(mode: M, identifier: SchemaKeys<M>, value: unknown) => {
         // Pick the right schema dynamically
         const schema =
             mode === "login"
-                ? loginSchema.pick({ [identifier]: true } as Record<
-                      SchemaKeys<"login">,
-                      true
-                  >)
+                ? loginSchema.pick({ [identifier]: true } as Record<SchemaKeys<"login">, true>)
                 : registerSchema.pick({ [identifier]: true } as Record<
                       SchemaKeys<"register">,
                       true
@@ -95,12 +86,7 @@ export default function AuthForms() {
                                 <Input
                                     id="name"
                                     value={formInput.name}
-                                    onChange={(e) =>
-                                        handleInputChange(
-                                            "name",
-                                            e.target.value,
-                                        )
-                                    }
+                                    onChange={(e) => handleInputChange("name", e.target.value)}
                                     placeholder="John Doe"
                                 />
                                 {errors.name && (
@@ -120,16 +106,10 @@ export default function AuthForms() {
                                 onBlur={(e) =>
                                     setErrors((prev) => ({
                                         ...prev,
-                                        email: validateInput(
-                                            mode,
-                                            "email",
-                                            e.target.value,
-                                        ),
+                                        email: validateInput(mode, "email", e.target.value),
                                     }))
                                 }
-                                onChange={(e) =>
-                                    handleInputChange("email", e.target.value)
-                                }
+                                onChange={(e) => handleInputChange("email", e.target.value)}
                                 placeholder="you@example.com"
                             />
                             {errors.email && (
@@ -148,19 +128,10 @@ export default function AuthForms() {
                                 onBlur={(e) =>
                                     setErrors((prev) => ({
                                         ...prev,
-                                        password: validateInput(
-                                            mode,
-                                            "password",
-                                            e.target.value,
-                                        ),
+                                        password: validateInput(mode, "password", e.target.value),
                                     }))
                                 }
-                                onChange={(e) =>
-                                    handleInputChange(
-                                        "password",
-                                        e.target.value,
-                                    )
-                                }
+                                onChange={(e) => handleInputChange("password", e.target.value)}
                                 placeholder="••••••••"
                             />
                             {errors.password && (
@@ -172,18 +143,13 @@ export default function AuthForms() {
 
                         {mode === "register" && (
                             <div className="space-y-2">
-                                <Label htmlFor="confirm">
-                                    Confirm Password
-                                </Label>
+                                <Label htmlFor="confirm">Confirm Password</Label>
                                 <Input
                                     id="confirm"
                                     type="password"
                                     value={formInput.confirmPassword}
                                     onChange={(e) =>
-                                        handleInputChange(
-                                            "confirmPassword",
-                                            e.target.value,
-                                        )
+                                        handleInputChange("confirmPassword", e.target.value)
                                     }
                                     placeholder="••••••••"
                                 />
@@ -194,22 +160,18 @@ export default function AuthForms() {
                                 )}
                             </div>
                         )}
-
-                        <Button className="w-full" type="submit">
+                        {authError && <p>{authError}</p>}
+                        <Button className="w-full" disabled={loading} type="submit">
                             {mode === "login" ? "Login" : "Register"}
                         </Button>
                     </form>
 
                     <p className="text-sm text-center text-gray-600">
-                        {mode === "login"
-                            ? "Don't have an account?"
-                            : "Already have an account?"}{" "}
+                        {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
                         <button
                             type="button"
                             className="text-blue-600 hover:underline"
-                            onClick={() =>
-                                setMode(mode === "login" ? "register" : "login")
-                            }
+                            onClick={() => setMode(mode === "login" ? "register" : "login")}
                         >
                             {mode === "login" ? "Register" : "Login"}
                         </button>

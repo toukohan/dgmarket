@@ -44,7 +44,9 @@ export default function ProductForm({
 
     return (
         <div className="border rounded p-4 mb-4">
-            <h3 className="font-semibold mb-2">Add product</h3>
+            <h3 className="font-semibold mb-2">
+                {mode === "create" ? "Add product" : "Edit product"}
+            </h3>
 
             <input
                 value={values.name}
@@ -91,7 +93,7 @@ export default function ProductForm({
 
             <div className="flex gap-2 mt-3">
                 <button onClick={submit} disabled={loading}>
-                    Create
+                    {mode === "create" ? "Create" : "Save"}
                 </button>
                 <button onClick={onCancel}>Cancel</button>
             </div>

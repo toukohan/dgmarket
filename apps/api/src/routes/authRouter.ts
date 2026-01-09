@@ -79,6 +79,12 @@ router.post("/logout", async (req, res) => {
         sameSite: "strict",
     });
 
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+    });
+
     res.sendStatus(204);
 });
 

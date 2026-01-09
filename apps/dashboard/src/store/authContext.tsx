@@ -1,75 +1,79 @@
-import React, { createContext, useState, use } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 import { api } from "@dgmarket/api-client";
 
-import type { AuthUser } from "@dgmarket/types";
+import type { PublicUser } from "@dgmarket/types";
 
 interface AuthContextType {
-    user: AuthUser | null;
+    user: PublicUser | null;
+    authError: string | null;
     loading: boolean;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
-    register: (name: string, email: string, password: string) => Promise<void>;
+    login(email: string, password: string): Promise<void>;
+    register(name: string, email: string, password: string): Promise<void>;
+    logout(): Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = (): AuthContextType => {
-    const context = use(AuthContext);
-
-    if (!context) {
-        throw new Error("useAuth must be used within a provider");
+    const ctx = useContext(AuthContext);
+    if (!ctx) {
+        throw new Error("useAuth must be used within AuthProvider");
     }
-
-    return context;
+    return ctx;
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const auth = useProvideAuth();
-    return <AuthContext value={auth}>{children}</AuthContext>;
-};
-
-const useProvideAuth = (): AuthContextType => {
-    const [user, setUser] = useState<AuthUser | null>(null);
+    const [user, setUser] = useState<PublicUser | null>(null);
     const [loading, setLoading] = useState(false);
+    const [authError, setAuthError] = useState<string | null>(null);
 
     const login = async (email: string, password: string) => {
         setLoading(true);
-        const response = await api.post("/auth/login", { email, password });
-        if (response.status === 200) {
-            setUser(response.data.user);
+        setAuthError(null);
+        try {
+            const { data } = await api.post("/auth/login", { email, password });
+            setUser(data.user);
+        } catch {
+            setAuthError("Invalid email or password");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     const register = async (name: string, email: string, password: string) => {
         setLoading(true);
-        const response = await api.post("/auth/register", {
-            name,
-            email,
-            password,
-        });
-
-        if (response.status === 201) {
-            setUser(response.data.user);
+        setAuthError(null);
+        try {
+            const { data } = await api.post("/auth/register", {
+                name,
+                email,
+                password,
+            });
+            setUser(data.user);
+        } catch {
+            setAuthError("Registration failed. Please try again.");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     const logout = async () => {
         setLoading(true);
-        const response = await api.post("/auth/logout");
-        if (response.status === 204) {
+        setAuthError(null);
+        try {
+            await api.post("/auth/logout");
+        } catch {
+            // Ignore errors — logout is best-effort
+        } finally {
             setUser(null);
+            setLoading(false);
         }
-        setLoading(false);
     };
 
-    return {
-        user,
-        login,
-        logout,
-        register,
-        loading,
-    };
+    return (
+        <AuthContext.Provider value={{ user, authError, loading, login, register, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };

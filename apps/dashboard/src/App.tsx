@@ -4,11 +4,8 @@ import { Button } from "./components/ui/button";
 import { useAuth } from "./store/authContext";
 
 function App() {
-    const { user, loading, logout } = useAuth();
+    const { user, logout } = useAuth();
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
     return (
         <div>
             {!user ? (
