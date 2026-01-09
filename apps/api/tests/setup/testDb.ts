@@ -3,17 +3,22 @@ import { beforeAll, afterAll, beforeEach, afterEach } from "vitest";
 
 import { createTestApp } from "./testApp.js";
 import pool, { runMigrations } from "../../src/database/index.js";
-import { resetDb } from "../helpers/index.js";
+import { resetTestData } from "../helpers/index.js";
 
 let client: PoolClient;
 let api: ReturnType<typeof createTestApp>;
+let migrated = false;
 
 beforeAll(async () => {
-    await resetDb();
-});
+    if (process.env.NODE_ENV !== "test") {
+        throw new Error("Tests must run with NODE_ENV=test");
+    }
 
-afterAll(async () => {
-    await pool.end(); // always close pool;
+    if (!migrated) {
+        await runMigrations();
+        migrated = true;
+    }
+    await resetTestData();
 });
 
 beforeEach(async () => {
@@ -25,6 +30,10 @@ beforeEach(async () => {
 afterEach(async () => {
     await client.query("ROLLBACK");
     client.release();
+});
+
+afterAll(async () => {
+    await pool.end(); // always close pool;
 });
 
 export function getTestApi() {
