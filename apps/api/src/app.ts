@@ -10,7 +10,7 @@ import { dbMiddleware } from "./middleware/dbMiddleware.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { ProductRepository } from "./repositories/ProductRepository.js";
 import authRouter from "./routes/authRouter.js";
-import { productRouter } from "./routes/producRouter.js";
+import { productRouter } from "./routes/productRouter.js";
 import { ProductService } from "./services/ProductService.js";
 
 dotenv.config();

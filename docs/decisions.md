@@ -21,3 +21,7 @@ Because of this, a class-based approach was tried for the product service and re
 Only the product feature was refactored this way as a small, contained experiment. Other services remain function-based for now, and the goal is to compare ergonomics and testability before deciding whether to apply the same pattern more broadly.
 
 The intent is to improve readability and developer experience, not to enforce an object-oriented style across the entire codebase.
+
+## Decision: Next.js Integration
+
+Because NodeNext modules were used to build the api and schemas package, it is required for now to build the schemas for Next to use them.

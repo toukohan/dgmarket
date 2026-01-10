@@ -16,7 +16,16 @@ function App() {
                         <h1 className="text-2xl font-bold">
                             Disc Golf Marketplace - Seller Dashboard
                         </h1>
-                        <Button onClick={() => logout()}>Logout</Button>
+                        <div className="flex items-center gap-4">
+                            <a
+                                href={import.meta.env.VITE_PUBLIC_APP_URL}
+                                className="text-sm text-muted-foreground hover:text-foreground"
+                            >
+                                View marketplace
+                            </a>
+
+                            <Button onClick={logout}>Logout</Button>
+                        </div>
                     </div>
                     <ProductList key={user?.id ?? "logged-out"} />
                 </div>

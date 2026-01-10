@@ -1,9 +1,10 @@
 export function Footer() {
     return (
-        <footer className="border-t">
-            <div className="container mx-auto px-4 py-6 text-sm text-muted-foreground">
-                © {new Date().getFullYear()} Kiekkotori
-            </div>
-        </footer>
+      <footer className="bg-primary">
+        <div className="mx-auto max-w-7xl px-4 py-6 text-sm text-muted-foreground text-white">
+          © {new Date().getFullYear()} Disc Golf Market
+        </div>
+      </footer>
     );
-}
+  }
+  

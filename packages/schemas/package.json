@@ -10,5 +10,11 @@
     },
     "scripts": {
         "build": "tsc -p tsconfig.build.json"
+    },
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
     }
 }

@@ -18,10 +18,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: {
-        default: "Kiekkotori",
-        template: "%s | Kiekkotori",
+        default: "Disc Golf Market",
+        template: "%s | Disc Golf Market",
     },
-    description: "A simple marketplace for disc golf products",
+    description: "A Market",
 };
 export default function RootLayout({
     children,
@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="fi">
-            <body className="min-h-screen flex flex-col">
+            <body className="bg-page min-h-screen flex flex-col">
                 <Header />
                 <main className="flex-1">{children}</main>
                 <Footer />

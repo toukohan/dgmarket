@@ -13,7 +13,7 @@ type Mode = "login" | "register";
 type SchemaKeys<M extends Mode> = M extends "login"
     ? keyof typeof loginSchema.shape
     : keyof typeof registerSchema.shape;
-
+const publicAppUrl = import.meta.env.VITE_PUBLIC_APP_URL;
 export default function AuthForms() {
     const [mode, setMode] = useState<Mode>("login");
     const [formInput, setFormInput] = useState({
@@ -176,6 +176,14 @@ export default function AuthForms() {
                             {mode === "login" ? "Register" : "Login"}
                         </button>
                     </p>
+                    <div className="pt-2 text-center">
+                        <a
+                            href={publicAppUrl}
+                            className="text-sm text-muted-foreground hover:text-foreground underline"
+                        >
+                            ← Back to marketplace
+                        </a>
+                    </div>
                 </CardContent>
             </Card>
         </div>

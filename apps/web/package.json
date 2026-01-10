@@ -9,10 +9,10 @@
         "lint": "eslint"
     },
     "dependencies": {
-        "@dgmarket/eslint": "workspace: *",
-        "@dgmarket/types": "workspace: *",
-        "@dgmarket/schemas": "workspace: *",
         "@dgmarket/api-client": "workspace: *",
+        "@dgmarket/eslint": "workspace: *",
+        "@dgmarket/schemas": "workspace: *",
+        "@dgmarket/types": "workspace: *",
         "next": "16.1.1",
         "react": "19.2.3",
         "react-dom": "19.2.3"
@@ -24,6 +24,7 @@
         "@types/react-dom": "^19",
         "eslint": "^9",
         "eslint-config-next": "16.1.1",
+        "prettier": "^3.7.4",
         "tailwindcss": "^4",
         "typescript": "^5"
     }
