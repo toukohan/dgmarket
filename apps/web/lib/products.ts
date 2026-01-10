@@ -17,3 +17,15 @@ export async function getProducts() {
       : null,
   }));
 }
+
+export async function getProduct(id: number) {
+  const res = await publicApi.get(`/products/${id}`);
+  const product = ProductPublicSchema.parse(res.data);
+
+  return {
+    ...product,
+    imageUrl: product.imageUrl
+      ? `${API_ORIGIN}${product.imageUrl}`
+      : null,
+  };
+}

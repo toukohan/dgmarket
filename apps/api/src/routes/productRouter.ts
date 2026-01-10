@@ -62,6 +62,17 @@ export function productRouter(productService: ProductService) {
         },
     );
 
+    router.get("/:id", async (req, res) => {
+        const id = Number(req.params.id);
+        const product = await productService.getPublicProductById(id);
+
+        if (!product) {
+            return res.status(404).end();
+        }
+
+        res.json(product);
+    });
+
     router.post(
         "/:id/image",
         authenticate,

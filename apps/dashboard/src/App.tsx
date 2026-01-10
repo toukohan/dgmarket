@@ -4,8 +4,10 @@ import { Button } from "./components/ui/button";
 import { useAuth } from "./store/authContext";
 
 function App() {
-    const { user, logout } = useAuth();
-
+    const { user, logout, initializing } = useAuth();
+    if (initializing) {
+        return <div className="p-4 text-sm text-muted-foreground">Checking session…</div>;
+    }
     return (
         <div>
             {!user ? (

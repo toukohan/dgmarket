@@ -1,13 +1,42 @@
 import { registerSchema, loginSchema } from "@dgmarket/schemas";
 import { Router } from "express";
 
-import { extractDb } from "../database/index.js";
-import { InvalidTokenError, MissingTokenError } from "../errors/index.js";
-import { validate } from "../middleware/validate.js";
-import { login, register, logout, refresh } from "../services/auth.service.js";
-import { verifyRefreshToken, attachAuthCookies } from "../utils/jwt.js";
+import {
+    authenticate,
+    AuthenticatedRequest,
+} from "src/middleware/authenticate.js";
 
+import { extractDb } from "../database/index.js";
+import {
+    InvalidTokenError,
+    MissingTokenError,
+    UnauthorizedError,
+} from "../errors/index.js";
+import { validate } from "../middleware/validate.js";
+import {
+    login,
+    register,
+    getUserById,
+    logout,
+    refresh,
+} from "../services/auth.service.js";
+import { verifyRefreshToken, attachAuthCookies } from "../utils/jwt.js";
 const router = Router();
+
+router.get(
+    "/me",
+    authenticate,
+    async (req: AuthenticatedRequest, res, next) => {
+        const db = extractDb(req);
+
+        if (!req.userId) {
+            return next(new UnauthorizedError("No user id"));
+        }
+        const user = await getUserById(req.userId, db);
+
+        res.json(user);
+    },
+);
 
 router.post("/refresh", async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken;

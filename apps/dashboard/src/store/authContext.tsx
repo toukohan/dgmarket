@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { api } from "@dgmarket/api-client";
 
@@ -8,6 +8,7 @@ interface AuthContextType {
     user: PublicUser | null;
     authError: string | null;
     loading: boolean;
+    initializing: boolean;
     login(email: string, password: string): Promise<void>;
     register(name: string, email: string, password: string): Promise<void>;
     logout(): Promise<void>;
@@ -26,7 +27,21 @@ export const useAuth = (): AuthContextType => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<PublicUser | null>(null);
     const [loading, setLoading] = useState(false);
+    const [initializing, setInitializing] = useState(true);
     const [authError, setAuthError] = useState<string | null>(null);
+
+    useEffect(() => {
+        api.get("/auth/me")
+            .then((res) => {
+                setUser(res.data);
+            })
+            .catch(() => {
+                setUser(null);
+            })
+            .finally(() => {
+                setInitializing(false);
+            });
+    }, []);
 
     const login = async (email: string, password: string) => {
         setLoading(true);
@@ -72,7 +87,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, authError, loading, login, register, logout }}>
+        <AuthContext.Provider
+            value={{ user, authError, initializing, loading, login, register, logout }}
+        >
             {children}
         </AuthContext.Provider>
     );

@@ -18,7 +18,7 @@ export function Header() {
           <Link
             href={process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "http://localhost:5173"}
           >
-            Login
+            Sell
           </Link>
 
         </nav>

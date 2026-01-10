@@ -1,16 +1,16 @@
 import { ProductPublic } from "@dgmarket/schemas";
+import Link from "next/link";
 
 export interface ProductCardProps {
     product: ProductPublic;
     onClick?: () => void;
   }
 
-  
   export function ProductCard({ product }: ProductCardProps) {
     const { name, priceCents, condition, imageUrl } = product;
-    
     return (
-      <article className="p-2 overflow-hidden rounded-lg border bg-white">
+      <Link href={`/products/${product.id}`} className="block">
+        <article className="overflow-hidden rounded-lg border bg-white hover:shadow transition">
         <div className="aspect-square bg-muted flex items-center justify-center">
           {imageUrl ? (
             <img
@@ -40,7 +40,8 @@ export interface ProductCardProps {
             </span>
           </div>
         </div>
-      </article>
+        </article>
+      </Link>
     );
   }
   

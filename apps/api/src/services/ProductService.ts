@@ -33,6 +33,14 @@ export class ProductService {
         return rows.map((row) => this.mapRowToPublic(row));
     }
 
+    async getPublicProductById(
+        productId: number,
+    ): Promise<ProductPublic | null> {
+        const row = await this.products.findById(productId);
+
+        return row ? this.mapRowToPublic(row) : null;
+    }
+
     async getPublicProducts(): Promise<ProductPublic[]> {
         const rows = await this.products.findPublic();
         return rows.map((row) => this.mapRowToPublic(row));

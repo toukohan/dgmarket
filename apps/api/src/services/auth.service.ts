@@ -103,3 +103,9 @@ export async function refresh(
 export async function logout(refreshToken: string, db: Db): Promise<boolean> {
     return await revokeRefreshToken(refreshToken, db);
 }
+
+export async function getUserById(userId: number, db: Db): Promise<PublicUser> {
+    const foundUser = await findUserById(userId, db);
+    if (!foundUser) throw new UnauthorizedError("No user found");
+    return toPublicUser(foundUser);
+}
