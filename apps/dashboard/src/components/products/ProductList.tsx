@@ -1,136 +1,177 @@
-// components/products/ProductList.tsx
 import { useEffect, useState } from "react";
+
 import { api } from "@dgmarket/api-client";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/store/authContext";
 
-import type { ProductPublic, ProductCreate, ProductUpdate } from "@dgmarket/schemas";
 import ProductForm from "./ProductForm";
-import ProductRow
- from "./ProductRow";
+import ProductRow from "./ProductRow";
+
+import type { ProductPublic, ProductCreate } from "@dgmarket/schemas";
+
 function publicToFormValues(product: ProductPublic): ProductCreate {
-  return {
-    name: product.name,
-    description: product.description,
-    priceCents: product.priceCents,
-    condition: product.condition,
-  };
+    return {
+        name: product.name,
+        description: product.description,
+        priceCents: product.priceCents,
+        condition: product.condition,
+    };
 }
 
 export default function ProductList() {
-  const { user, logout } = useAuth();
+    const { logout } = useAuth();
 
-  const [products, setProducts] = useState<ProductPublic[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+    const [products, setProducts] = useState<ProductPublic[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-  const [creating, setCreating] = useState(false);
+    const [creating, setCreating] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<ProductPublic | null>(null);
 
-  const [editingProduct, setEditingProduct] =
-    useState<ProductPublic | null>(null);
+    useEffect(() => {
+        let cancelled = false;
 
-  useEffect(() => {
-    if (!user) return;
+        api.get("/products/mine")
+            .then((res) => {
+                if (cancelled) return;
+                setProducts(res.data);
+                setError(null);
+            })
+            .catch((err: any) => {
+                if (cancelled) return;
+                if (err.isAuthExpired) {
+                    logout();
+                } else {
+                    setError("Failed to load products");
+                }
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
+            });
 
-    setLoading(true);
-    api
-      .get("/products/mine")
-      .then((res) => {
-        setProducts(res.data);
-        setError(null);
-      })
-      .catch((err: any) => {
-        if (err.isAuthExpired) {
-          logout();
-        } else {
-          setError("Failed to load products");
+        return () => {
+            cancelled = true;
+        };
+    }, [logout]);
+
+    const handleDelete = async (product: ProductPublic) => {
+        const confirmed = window.confirm(`Delete "${product.name}"? This cannot be undone.`);
+
+        if (!confirmed) return;
+
+        try {
+            await api.delete(`/products/${product.id}`);
+
+            setProducts((prev) => prev.filter((p) => p.id !== product.id));
+            if (editingProduct?.id === product.id) {
+                setEditingProduct(null);
+            }
+        } catch (err: any) {
+            if (err.isAuthExpired) {
+                logout();
+            } else {
+                alert("Failed to delete product");
+            }
         }
-      })
-      .finally(() => setLoading(false));
-  }, [user]);
+    };
 
-  const handleDelete = async (product: ProductPublic) => {
-    const confirmed = window.confirm(
-      `Delete "${product.name}"? This cannot be undone.`,
-    );
-  
-    if (!confirmed) return;
-  
-    try {
-      await api.delete(`/products/${product.id}`);
-  
-      setProducts((prev) =>
-        prev.filter((p) => p.id !== product.id),
-      );
-      // empty editstate on delete
-      if (editingProduct?.id === product.id) {
-        setEditingProduct(null);
-      }
-    } catch (err: any) {
-      if (err.isAuthExpired) {
-        logout();
-      } else {
-        alert("Failed to delete product");
-      }
+    if (loading) {
+        return (
+            <div className="max-w-4xl mx-auto p-4">
+                <p className="text-sm text-muted-foreground">Loading products…</p>
+            </div>
+        );
     }
-  };
-  
-  if (loading) return <div>Loading products…</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
 
-  return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Your products</h2>
-        <button onClick={() => setCreating(true)}>Add product</button>
-      </div>
-      {creating && (
-        <ProductForm
-          mode="create"
-          initialValues={{
-            name: "",
-            description: null,
-            priceCents: 0,
-            condition: "used",
-          }}
-          onCancel={() => setCreating(false)}
-          onSuccess={(product) => {
-            setProducts((prev) => [product, ...prev]);
-            setCreating(false);
-          }}
-        />
-      )}
+    if (error) {
+        return (
+            <div className="max-w-4xl mx-auto p-4">
+                <p className="text-sm text-red-600">{error}</p>
+            </div>
+        );
+    }
 
-      {products.length === 0 ? (
-        <p>No products yet.</p>
-      ) : (
-        <ul className="space-y-2">
-          {products.map((product) => (
-            <li key={product.id}>
-              {editingProduct?.id === product.id ? (
+    return (
+        <div className="max-w-4xl mx-auto p-4 space-y-6">
+            {/* Page header */}
+            <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-semibold">Your products</h2>
+
+                <Button
+                    disabled={creating === true}
+                    onClick={() => {
+                        setCreating(true);
+                        setEditingProduct(null);
+                    }}
+                >
+                    Add product
+                </Button>
+            </div>
+
+            {/* Create form */}
+            {creating && (
                 <ProductForm
-                  mode="edit"
-                  productId={product.id}
-                  initialValues={publicToFormValues(product)}
-                  onCancel={() => setEditingProduct(null)}
-                  onSuccess={(updated) => {
-                    setProducts((prev) =>
-                      prev.map((p) => (p.id === updated.id ? updated : p)),
-                    );
-                    setEditingProduct(null);
-                  }}
+                    mode="create"
+                    initialValues={{
+                        name: "",
+                        description: null,
+                        priceCents: 0,
+                        condition: "used",
+                    }}
+                    onCancel={() => setCreating(false)}
+                    onSuccess={(product) => {
+                        setProducts((prev) => [product, ...prev]);
+                        setCreating(false);
+                    }}
                 />
-              ) : (
-                <ProductRow
-                  product={product}
-                  onEdit={() => setEditingProduct(product)}
-                  onDelete={() => handleDelete(product)}
-                />
-              )}
-            </li>
-          ))}
-        </ul>
+            )}
 
-      )}
-    </div>
-  );
+            {/* Products list */}
+            {products.length === 0 ? (
+                <Card>
+                    <CardContent className="p-6 text-sm text-muted-foreground">
+                        You don’t have any products yet.
+                    </CardContent>
+                </Card>
+            ) : (
+                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {products.map((product) => (
+                        <li
+                            key={product.id}
+                            className={
+                                editingProduct?.id === product.id ? "col-span-full" : undefined
+                            }
+                        >
+                            {editingProduct?.id === product.id ? (
+                                <ProductForm
+                                    mode="edit"
+                                    productId={product.id}
+                                    initialValues={publicToFormValues(product)}
+                                    onCancel={() => setEditingProduct(null)}
+                                    onSuccess={(updated) => {
+                                        setProducts((prev) =>
+                                            prev.map((p) => (p.id === updated.id ? updated : p)),
+                                        );
+                                        setEditingProduct(null);
+                                    }}
+                                />
+                            ) : (
+                                <Card>
+                                    <CardContent className="p-3">
+                                        <ProductRow
+                                            product={product}
+                                            onEdit={() => setEditingProduct(product)}
+                                            onDelete={() => handleDelete(product)}
+                                        />
+                                    </CardContent>
+                                </Card>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
 }

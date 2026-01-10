@@ -18,7 +18,7 @@ function App() {
                         </h1>
                         <Button onClick={() => logout()}>Logout</Button>
                     </div>
-                    <ProductList />
+                    <ProductList key={user?.id ?? "logged-out"} />
                 </div>
             )}
         </div>

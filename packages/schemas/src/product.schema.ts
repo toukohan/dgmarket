@@ -43,6 +43,7 @@ export const ProductPublicSchema = z.object({
     description: z.string().nullable().optional(),
     priceCents: z.number().int().nonnegative(),
     condition: ProductConditionSchema,
+    imageUrl: z.string().url().nullable(),
     createdAt: IsoDateString,
     updatedAt: IsoDateString,
 });
