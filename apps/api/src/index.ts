@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
+import dotenv from "dotenv";
+
 import { createApp } from "./app.js";
 import pool, { runMigrations } from "./database/index.js";
+dotenv.config();
 
 const app = createApp(pool);
 const port = process.env.PORT || 4000;

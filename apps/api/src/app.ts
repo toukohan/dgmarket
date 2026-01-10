@@ -1,6 +1,5 @@
 import cookieParser from "cookie-parser";
 import cors, { CorsOptions } from "cors";
-import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import path from "path";
@@ -12,8 +11,6 @@ import { ProductRepository } from "./repositories/ProductRepository.js";
 import authRouter from "./routes/authRouter.js";
 import { productRouter } from "./routes/productRouter.js";
 import { ProductService } from "./services/ProductService.js";
-
-dotenv.config();
 
 export function createApp(db: Db) {
     const app = express();

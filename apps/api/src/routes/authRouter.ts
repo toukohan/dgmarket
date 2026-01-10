@@ -1,17 +1,16 @@
 import { registerSchema, loginSchema } from "@dgmarket/schemas";
 import { Router } from "express";
 
-import {
-    authenticate,
-    AuthenticatedRequest,
-} from "src/middleware/authenticate.js";
-
 import { extractDb } from "../database/index.js";
 import {
     InvalidTokenError,
     MissingTokenError,
     UnauthorizedError,
 } from "../errors/index.js";
+import {
+    authenticate,
+    AuthenticatedRequest,
+} from "../middleware/authenticate.js";
 import { validate } from "../middleware/validate.js";
 import {
     login,

@@ -8,7 +8,12 @@ import { resetTestData } from "../helpers/index.js";
 let client: PoolClient;
 let api: ReturnType<typeof createTestApp>;
 
+beforeAll(async () => {
+    await resetTestData();
+    // console.log("BEFORE ALL DATABASE", process.env.POSTGRES_DB);
+});
 beforeEach(async () => {
+    // console.log("BEFORE EACH DATABASE", process.env.POSTGRES_DB);
     client = await pool.connect();
     api = createTestApp(client);
     client.query("BEGIN");
