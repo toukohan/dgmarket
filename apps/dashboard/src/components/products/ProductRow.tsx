@@ -10,14 +10,21 @@ export interface ProductRowProps {
     /** Optional user intent: delete this product */
     onDelete?: () => void;
 }
+
 const uploads = "http://localhost:4000";
+
 export default function ProductRow({ product, onEdit, onDelete }: ProductRowProps) {
+    const imageSrc =
+        product.imageUrl && product.imageUpdatedAt
+            ? `${product.imageUrl}?v=${product.imageUpdatedAt}`
+            : product.imageUrl;
+
     return (
         <div className="flex justify-between items-start gap-3">
             <div>
                 {product.imageUrl && (
                     <img
-                        src={uploads + product.imageUrl}
+                        src={uploads + imageSrc}
                         alt={product.name}
                         className="mb-2 aspect-[4/3] w-full rounded-md object-cover bg-muted"
                     />

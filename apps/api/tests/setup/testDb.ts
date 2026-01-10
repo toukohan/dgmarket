@@ -8,10 +8,6 @@ import { resetTestData } from "../helpers/index.js";
 let client: PoolClient;
 let api: ReturnType<typeof createTestApp>;
 
-beforeAll(async () => {
-    await resetTestData();
-});
-
 beforeEach(async () => {
     client = await pool.connect();
     api = createTestApp(client);

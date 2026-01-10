@@ -40,10 +40,11 @@ export type ProductUpdate = z.infer<typeof ProductUpdateSchema>;
 export const ProductPublicSchema = z.object({
     id: z.number().int(),
     name: z.string(),
-    description: z.string().nullable().optional(),
+    description: z.string().nullable(),
     priceCents: z.number().int().nonnegative(),
     condition: ProductConditionSchema,
-    imageUrl: z.string().url().nullable(),
+    imageUrl: z.url().nullable(),
+    imageUpdatedAt: IsoDateString.nullable(),
     createdAt: IsoDateString,
     updatedAt: IsoDateString,
 });

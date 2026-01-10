@@ -30,7 +30,7 @@ export async function runMigrations() {
 
         const sql = fs.readFileSync(path.join(migrationsDir, file), "utf8");
 
-        //console.log(`Running migration: ${file}`);
+        console.log(`Running migration: ${file}`);
         await pool.query("BEGIN");
         try {
             await pool.query(sql);

@@ -84,7 +84,11 @@ export class ProductService {
             throw new ForbiddenError("You do not own this product");
         }
 
-        await this.products.updateImage(productId, imageUrl);
+        const updated = await this.products.updateImage(productId, imageUrl);
+
+        if (!updated) {
+            throw new NotFoundError("Product not found");
+        }
     }
 
     async deleteProduct(productId: number, sellerId: number): Promise<void> {
@@ -113,6 +117,9 @@ export class ProductService {
             priceCents: row.price_cents,
             condition: row.condition,
             imageUrl: row.image_url,
+            imageUpdatedAt: row.image_updated_at
+                ? row.image_updated_at.toISOString()
+                : null,
             createdAt: row.created_at.toISOString(),
             updatedAt: row.updated_at.toISOString(),
         };
