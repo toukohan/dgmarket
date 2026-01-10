@@ -3,6 +3,7 @@ import cors, { CorsOptions } from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
+import path from "path";
 
 import { Db, DbRequest } from "./database/index.js";
 import { dbMiddleware } from "./middleware/dbMiddleware.js";
@@ -37,6 +38,11 @@ export function createApp(db: Db) {
     app.use(cookieParser());
     app.use(express.json());
 
+    app.use("/uploads", (req, res, next) => {
+        res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+        next();
+    });
+    app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
     app.get("/api/health", (req: DbRequest, res) => {
         res.json({ ok: true });
     });

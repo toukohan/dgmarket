@@ -18,10 +18,14 @@ import { Textarea } from "@/components/ui/textarea";
 import type { ProductCreate, ProductPublic } from "@dgmarket/schemas";
 
 type Mode = "create" | "edit";
+type ProductFormValues = ProductCreate & {
+    imageUrl?: string | null;
+    imageAlt?: string;
+};
 
 interface ProductFormProps {
     mode: Mode;
-    initialValues: ProductCreate;
+    initialValues: ProductFormValues;
     productId?: number;
     onSuccess: (product: ProductPublic) => void;
     onCancel: () => void;
@@ -41,6 +45,8 @@ export default function ProductForm({
 }: ProductFormProps) {
     const [values, setValues] = useState<ProductCreate>(initialValues);
     const [priceInput, setPriceInput] = useState((initialValues.priceCents / 100).toString());
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(initialValues.imageUrl ?? null);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -71,7 +77,21 @@ export default function ProductForm({
                     ? await api.post("/products", payload)
                     : await api.patch(`/products/${productId}`, payload);
 
-            onSuccess(res.data);
+            let product = res.data;
+
+            if (imageFile) {
+                const formData = new FormData();
+                formData.append("image", imageFile);
+
+                const imgRes = await api.post(`/products/${product.id}/image`, formData);
+
+                product = {
+                    ...product,
+                    imageUrl: `${imgRes.data.imageUrl}?v=${Date.now()}`,
+                };
+            }
+
+            onSuccess(product);
         } catch (err: any) {
             setError(err.response?.data?.message ?? "Failed to save product");
         } finally {
@@ -176,6 +196,48 @@ export default function ProductForm({
                                 <SelectItem value="used">Used</SelectItem>
                             </SelectContent>
                         </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>Image</Label>
+
+                        <div className="flex items-center gap-4">
+                            {imagePreview ? (
+                                <img
+                                    src={imagePreview}
+                                    alt="Preview"
+                                    className="h-24 w-24 rounded-md object-cover border"
+                                />
+                            ) : (
+                                <div className="h-24 w-24 rounded-md border bg-muted flex items-center justify-center text-sm text-muted-foreground">
+                                    No image
+                                </div>
+                            )}
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                id="product-image-upload"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+
+                                    setImageFile(file);
+                                    setImagePreview(URL.createObjectURL(file));
+                                }}
+                            />
+
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={() =>
+                                    document.getElementById("product-image-upload")?.click()
+                                }
+                            >
+                                Choose image
+                            </Button>
+                        </div>
                     </div>
                 </div>
 

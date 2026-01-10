@@ -7,6 +7,7 @@ export type ProductRow = {
     description: string | null;
     price_cents: number;
     condition: "new" | "used";
+    image_url: string | null;
     created_at: Date;
     updated_at: Date;
 };
@@ -134,6 +135,13 @@ export class ProductRepository {
         );
 
         return rows[0] ?? null;
+    }
+
+    async updateImage(productId: number, imageUrl: string) {
+        await this.db.query(
+            "UPDATE products SET image_url = $1 WHERE id = $2",
+            [imageUrl, productId],
+        );
     }
 
     async delete(productId: number): Promise<boolean> {

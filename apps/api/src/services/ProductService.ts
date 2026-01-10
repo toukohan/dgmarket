@@ -69,6 +69,24 @@ export class ProductService {
         return this.mapRowToPublic(updated);
     }
 
+    async updateProductImage(
+        productId: number,
+        sellerId: number,
+        imageUrl: string,
+    ): Promise<void> {
+        const existing = await this.products.findById(productId);
+
+        if (!existing) {
+            throw new NotFoundError("Product not found");
+        }
+
+        if (existing.seller_id !== sellerId) {
+            throw new ForbiddenError("You do not own this product");
+        }
+
+        await this.products.updateImage(productId, imageUrl);
+    }
+
     async deleteProduct(productId: number, sellerId: number): Promise<void> {
         const existing = await this.products.findById(productId);
 
@@ -94,6 +112,7 @@ export class ProductService {
             description: row.description,
             priceCents: row.price_cents,
             condition: row.condition,
+            imageUrl: row.image_url,
             createdAt: row.created_at.toISOString(),
             updatedAt: row.updated_at.toISOString(),
         };

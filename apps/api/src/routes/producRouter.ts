@@ -6,6 +6,7 @@ import {
     authenticate,
     AuthenticatedRequest,
 } from "../middleware/authenticate.js";
+import { uploadProductImage } from "../middleware/upload.js";
 import { ProductService } from "../services/ProductService.js";
 
 export function productRouter(productService: ProductService) {
@@ -58,6 +59,31 @@ export function productRouter(productService: ProductService) {
 
             const products = await productService.getSellerProducts(req.userId);
             res.json(products);
+        },
+    );
+
+    router.post(
+        "/:id/image",
+        authenticate,
+        uploadProductImage.single("image"),
+        async (req: AuthenticatedRequest, res) => {
+            if (!req.userId) {
+                throw new UnauthorizedError("Missing userId");
+            }
+            if (!req.file) {
+                return res.status(400).json({ message: "No image uploaded" });
+            }
+
+            const productId = Number(req.params.id);
+            const imageUrl = `/uploads/products/${req.file.filename}`;
+
+            await productService.updateProductImage(
+                productId,
+                req.userId,
+                imageUrl,
+            );
+
+            res.json({ imageUrl });
         },
     );
 
