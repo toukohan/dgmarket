@@ -172,4 +172,20 @@ When working with ChatGPT, reference the baseline explicitly:
 
 ---
 
-_Last updated: 07.01.2026_
+## Use of AI tools
+
+This project was developed with the assistance of large language models (LLMs) as part of my learning and development process.
+
+I used AI tools to:
+
+- reason about architecture and project structure
+
+- generate boilerplate and common patterns
+
+- debug errors and explore alternative solutions
+
+- validate my understanding of unfamiliar concepts
+
+All architectural decisions, integrations, and final implementations were reviewed, adapted, and tested by me. I treat AI as a productivity and learning aid rather than an authority, and I avoid using generated code that I don’t understand.
+
+_Last updated: 11.01.2026_
