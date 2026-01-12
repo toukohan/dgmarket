@@ -12,7 +12,7 @@
     FROM base AS test
     
     RUN pnpm install --frozen-lockfile
-    RUN pnpm build:packages
+    RUN pnpm --filter @dgmarket/schemas build
     
     WORKDIR /app/apps/api
     CMD ["pnpm", "test"]
