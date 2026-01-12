@@ -172,6 +172,38 @@ When working with ChatGPT, reference the baseline explicitly:
 
 ---
 
+## Deployment Architecture (Production)
+
+This project is designed to be deployed on a single VPS using Docker.
+
+All applications run as isolated containers behind a shared reverse proxy.
+
+### High-level overview
+
+- A single reverse proxy terminates HTTPS and routes traffic by domain
+- Buyer app, seller dashboard, API, and WordPress (optional) run as separate services
+- Databases are private and never exposed publicly
+- Only ports 80 and 443 are exposed on the host
+
+### Domain-based routing
+
+Example production setup:
+
+- example.com → Buyer app (Next.js)
+- dashboard.example.com → Seller dashboard (SPA)
+- api.example.com → Backend API
+- blog.example.com → WordPress (optional)
+
+### Infrastructure principles
+
+- Apps are deployment units
+- Reverse proxy is the only public entry point
+- No app binds directly to the host network
+- Infrastructure configuration lives in `infra/`
+- Operational details are documented separately
+
+See `infra/README.md` for concrete deployment instructions.
+
 ## Use of AI tools
 
 This project was developed with the assistance of large language models (LLMs) as part of my learning and development process.
@@ -188,4 +220,4 @@ I used AI tools to:
 
 All architectural decisions, integrations, and final implementations were reviewed, adapted, and tested by me. I treat AI as a productivity and learning aid rather than an authority, and I avoid using generated code that I don’t understand.
 
-_Last updated: 11.01.2026_
+_Last updated: 12.01.2026_

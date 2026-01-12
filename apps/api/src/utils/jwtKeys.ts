@@ -5,7 +5,8 @@ import path from "node:path";
 function loadKeyFromFile(envName: string) {
     const p = process.env[envName];
     if (!p) throw new Error(`${envName} is not set`);
-    const joined = path.join(process.cwd(), p);
+    const joined = path.isAbsolute(p) ? p : path.join(process.cwd(), p);
+
     return fs.readFileSync(joined, "utf8");
 }
 

@@ -17,6 +17,7 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
+      target: test
     environment:
       POSTGRES_DB: test_db
       POSTGRES_USER: postgres
@@ -27,4 +28,3 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: pnpm test
