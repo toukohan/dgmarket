@@ -7,6 +7,7 @@
         "packages/*"
     ],
     "scripts": {
+        "build:packages": "pnpm -r --filter ./packages/* build",
         "dev": "pnpm -r --parallel dev",
         "dev:dashboard": "pnpm --filter dashboard dev",
         "dev:api": "pnpm --filter api dev",

@@ -12,6 +12,7 @@
     FROM base AS test
     
     RUN pnpm install --frozen-lockfile
+    RUN pnpm build:packages
     
     WORKDIR /app/apps/api
     CMD ["pnpm", "test"]
