@@ -7,11 +7,13 @@
         "packages/*"
     ],
     "scripts": {
-        "build:packages": "pnpm -r --filter ./packages/* build",
+        "build:packages": "pnpm -r --filter ./packages/** build",
         "dev": "pnpm -r --parallel dev",
         "dev:dashboard": "pnpm --filter dashboard dev",
         "dev:api": "pnpm --filter api dev",
         "dev:web": "pnpm --filter web dev",
+        "dev:schemas": "pnpm --filter @dgmarket/schemas dev",
+        "dev:api-client": "pnpm --filter @dgmarket/api-client dev",
         "db:start": "docker compose up -d",
         "db:stop": "docker compose down",
         "db:migrate": "pnpm --filter api db:migrate",

@@ -1,5 +1,5 @@
 // packages/api-client/sellerClient.ts
-import { createBaseClient } from "./base";
+import { createBaseClient } from "./base.js";
 
 import type { AxiosError } from "axios";
 

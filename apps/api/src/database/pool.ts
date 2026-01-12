@@ -16,6 +16,16 @@ if (DATABASE_URL) {
     connectionString = DATABASE_URL;
 } else {
     if (!POSTGRES_DB || !POSTGRES_USER || !POSTGRES_HOST) {
+        if (!POSTGRES_DB) {
+            console.error("Missing env var: POSTGRES_DB");
+        }
+        if (!POSTGRES_USER) {
+            console.error("Missing env var: POSTGRES_USER");
+        }
+        if (!POSTGRES_HOST) {
+            console.error("Missing env var: POSTGRES_HOST");
+        }
+
         throw new Error("Postgres environment variables are not fully defined");
     }
 

@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
-import dotenv from "dotenv";
+import "./env.js";
 import http from "http";
 
 import { createApp } from "./app.js";
 import pool, { runMigrations } from "./database/index.js";
-dotenv.config();
 
 const app = createApp(pool);
 const server = http.createServer(app);

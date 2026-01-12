@@ -1,2 +1,2 @@
-export { default as api } from "./axios";
-export * from "./publicClient";
+export { default as api } from "./dashboardClient.js";
+export * from "./publicClient.js";
