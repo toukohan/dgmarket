@@ -38,9 +38,10 @@
     COPY --from=builder /app/apps/api/pnpm-lock.yaml ./pnpm-lock.yaml
     
     RUN corepack enable \
-      && corepack prepare pnpm@latest --activate \
-      && pnpm install --prod --frozen-lockfile
+    && corepack prepare pnpm@latest --activate \
+    && pnpm install --prod --frozen-lockfile
     
+    RUN chown -R nodejs:nodejs /app
     USER nodejs
     EXPOSE 4000
     CMD ["pnpm", "start"]
